@@ -27,7 +27,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	while ($file=readdir($dir)) {
 		if (substr($file, 0, 1)!='.') {
 			echo "<a href='$root/resource/$file'>\n",
-				"<img src='$root/entity/$file'/>\n",
+				"<img src='$root/thumbnail/$file'/>\n",
 				"</a>\n";
 		}
 	}
