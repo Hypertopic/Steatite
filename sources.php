@@ -20,13 +20,13 @@ http://www.gnu.org/licenses/gpl.html
 $url_prefix = 'http://'.$_SERVER['HTTP_HOST'];//TODO https and non root
 $dir = opendir('resource');
 
-readdir($dir); //.
-readdir($dir); //..
 header('content-type: text/xml');
 echo "<?xml version='1.0' ?>\n"
 	."<entity>\n";
 while ($file=readdir($dir)) {
-	echo "<relatedEntity relationType='partOf' href='$url_prefix/entity/$file'/>\n";
+	if (substr($file, 0, 1)!='.') {
+		echo "<relatedEntity relationType='partOf' href='$url_prefix/entity/$file'/>\n";
+	}
 }
 echo "</entity>\n";
 
