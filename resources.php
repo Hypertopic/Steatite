@@ -23,11 +23,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'GET':
 	$dir = opendir('resource');
-	echo "<html>\n<body>\n";
+	echo "<html>\n",
+		"<head>\n<title>Steatite</title>\n</head>\n",
+		"<body>\n";
 	while ($file=readdir($dir)) {
 		if (substr($file, 0, 1)!='.') {
-			echo "<a href='$root/resource/$file'>\n",
-				"<img src='$root/thumbnail/$file'/>\n",
+			echo "<a href='$root/resource/$file'>",
+				"<img border='0' src='$root/thumbnail/$file'/>",
 				"</a>\n";
 		}
 	}
