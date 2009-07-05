@@ -22,16 +22,14 @@ $root = 'http://'.$_SERVER['HTTP_HOST'];
 switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'GET':
-	$dir = opendir('resource');
 	echo "<html>\n",
 		"<head>\n<title>Steatite</title>\n</head>\n",
 		"<body>\n";
-	while ($file=readdir($dir)) {
-		if (substr($file, 0, 1)!='.') {
-			echo "<a href='$root/resource/$file'>",
-				"<img border='0' src='$root/thumbnail/$file'/>",
-				"</a>\n";
-		}
+	exec('ls -1t resource', $files);
+	foreach ($files as $file) {
+		echo "<a href='$root/resource/$file'>",
+			"<img border='0' src='$root/thumbnail/$file'/>",
+			"</a>\n";
 	}
 	echo "<form method='post' ",
 		"enctype='multipart/form-data'>\n",
