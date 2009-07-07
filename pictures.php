@@ -25,9 +25,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	echo "<html>\n",
 		"<head>\n<title>Steatite</title>\n</head>\n",
 		"<body>\n";
-	exec('ls -1t resource', $files);
+	exec('ls -1t picture', $files);
 	foreach ($files as $file) {
-		echo "<a href='$root/resource/$file'>",
+		echo "<a href='$root/picture/$file'>",
 			"<img border='0' src='$root/thumbnail/$file'/>",
 			"</a>\n";
 	}
@@ -41,7 +41,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'POST':
 	$old_path = $_FILES['source']['tmp_name'];
-	$new_path = 'resource/'.sha1_file($old_path);
+	$new_path = 'picture/'.sha1_file($old_path);
 	move_uploaded_file($old_path, $new_path);
 	header("Location: $root/$new_path");//TODO 
 	break;

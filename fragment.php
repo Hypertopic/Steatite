@@ -30,7 +30,7 @@ echo "<?xml version='1.0' ?>\n"
 	."<entity>\n"
 	."<attribute name='type' value='fragment'/>\n"
 	."<resource name='thumbnail' href='$url_prefix/thumbnail/$id/$x1+$x2+$y1+$y2'/>\n"
-	."<resource name='highlight' href='$url_prefix/resource/$id#$x1+$x2+$y1+$y2'/>\n"
+	."<resource name='highlight' href='$url_prefix/picture/$id#$x1+$x2+$y1+$y2'/>\n"
 	."</entity>\n";
 
 ?>

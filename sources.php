@@ -18,7 +18,7 @@ http://www.gnu.org/licenses/gpl.html
 */
 
 $url_prefix = 'http://'.$_SERVER['HTTP_HOST'];//TODO https and non root
-$dir = opendir('resource');
+$dir = opendir('picture');
 
 header('content-type: text/xml');
 echo "<?xml version='1.0' ?>\n"

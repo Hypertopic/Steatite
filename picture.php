@@ -17,7 +17,7 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details:
 http://www.gnu.org/licenses/gpl.html
 */
 
-$id = 'resource/'.$_GET['id'];
+$id = 'picture/'.$_GET['id'];
 $mime = exec('file --brief --mime '.$id);
 header("content-type: $mime");
 readfile($id);

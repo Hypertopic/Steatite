@@ -4,6 +4,6 @@ RewriteRule ^entity/(.+)$ source.php?id=$1
 RewriteRule ^entity/$ sources.php
 RewriteRule ^thumbnail/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$ thumbnail.php?id=$1&x1=$2&y1=$3&x2=$4&y2=$5
 RewriteRule ^thumbnail/(.+)$ thumbnail.php?id=$1
-RewriteRule ^resource/(.+)$ resource.php?id=$1
-RewriteRule ^resource/$ resources.php
+RewriteRule ^picture/(.+)$ picture.php?id=$1
+RewriteRule ^picture/$ pictures.php
 

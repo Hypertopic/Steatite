@@ -25,7 +25,7 @@ echo "<?xml version='1.0' ?>\n"
 	."<entity>\n"
 	."<attribute name='type' value='source'/>\n"
 	."<resource name='thumbnail' href='$url_prefix/thumbnail/$id'/>\n"
-	."<resource name='source' href='$url_prefix/resource/$id'/>\n"
+	."<resource name='source' href='$url_prefix/picture/$id'/>\n"
 	."</entity>\n";
 
 ?>

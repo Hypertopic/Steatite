@@ -25,7 +25,7 @@ $y2 = $_GET['y2'];
 
 $destination = "thumbnail/$id.$x1.$y1.$x2.$y2";
 if (!file_exists($destination) || filesize($destination)==0) {
-	$cmd = "anytopnm resource/$id";
+	$cmd = "anytopnm picture/$id";
 	if (
 		is_numeric($x1) && is_numeric($y1) 
 		&& is_numeric($x2) && is_numeric($y2)) 
