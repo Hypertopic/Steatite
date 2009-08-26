@@ -6,4 +6,5 @@ RewriteRule ^thumbnail/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$ thumbnail.php?id=$1&x1=$
 RewriteRule ^thumbnail/(.+)$ thumbnail.php?id=$1
 RewriteRule ^picture/(.+)$ picture.php?id=$1
 RewriteRule ^picture/$ pictures.php
+RewriteRule ^resource/.+picture/(.+)$ resource.php?id=$1
 

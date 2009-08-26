@@ -20,21 +20,10 @@ http://www.gnu.org/licenses/gpl.html
 $id = $_GET['id'];
 $url_prefix = 'http://'.$_SERVER['HTTP_HOST'];//TODO https and non root
 
-pg_connect('dbname=steatite');
-$result = pg_query_params(
-	'SELECT * FROM attributes WHERE source_id=$1', array($id)
-);
-pg_close();
-
 header('content-type: text/xml');
-echo "<?xml version='1.0' ?>\n",
-	"<entity>\n";
-while ($row = pg_fetch_row($result)) {
-	echo "<attribute name='$row[1]' value='$row[2]'/>\n";
-}
-echo "<attribute name='type' value='source'/>\n",
-	"<resource name='thumbnail' href='$url_prefix/thumbnail/$id'/>\n",
-	"<resource name='source' href='$url_prefix/picture/$id'/>\n",
-	"</entity>\n";
+echo "<?xml version='1.0' ?>\n"
+	."<resource>\n"
+	."<entity href='$url_prefix/entity/$id'/>\n"
+	."</resource>\n";
 
 ?>
