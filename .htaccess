@@ -8,3 +8,4 @@ RewriteRule ^picture/(.+)$ picture.php?id=$1
 RewriteRule ^picture/$ pictures.php
 RewriteRule ^resource/.+picture/(.+)$ resource.php?id=$1
 
+RewriteRule ^corpus/.+$ corpus.php
