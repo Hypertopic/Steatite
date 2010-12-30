@@ -18,11 +18,10 @@ http://www.gnu.org/licenses/gpl.html
 */
 
 $dir = opendir('picture');
-pg_connect('dbname=steatite');
-$result = pg_query('SELECT * FROM attributes');
-pg_close();
+$db = new PDO('sqlite:attribute/database');
+$result = $db->query('SELECT * FROM attributes');
 $row = array();
-while ($row = pg_fetch_row($result)) {
+foreach ($result as $row) {
 	$name[$row[0]] = $row[2];
 }
 

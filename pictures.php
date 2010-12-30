@@ -44,12 +44,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	$id = sha1_file($old_path);
 	$new_path = 'picture/'.$id;
 	move_uploaded_file($old_path, $new_path);
-	pg_connect('dbname=steatite');
-	pg_query_params(
-		'INSERT INTO attributes(source_id, attribute_name, attribute_value) VALUES ($1, $2, $3)',
-		array($id, 'name', $_FILES['source']['name'])
+	$db = new PDO('sqlite:attribute/database');
+	$statement = $db->prepare(
+		'INSERT INTO attributes(source_id, attribute_name, attribute_value) VALUES (?, \'name\', ?)'
+	);
+	$statement->execute(array(
+		$id, 
+		$_FILES['source']['name'])
 	); 
-	pg_close();
 	header("Location: $root/$new_path");
 	break;
 }

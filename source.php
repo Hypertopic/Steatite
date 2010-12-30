@@ -20,16 +20,16 @@ http://www.gnu.org/licenses/gpl.html
 $id = $_GET['id'];
 $url_prefix = 'http://'.$_SERVER['HTTP_HOST'];//TODO https and non root
 
-pg_connect('dbname=steatite');
-$result = pg_query_params(
-	'SELECT * FROM attributes WHERE source_id=$1', array($id)
+$db = new PDO('sqlite:attribute/database');
+$query = $db->prepare(
+	'SELECT * FROM attributes WHERE source_id=?'
 );
-pg_close();
+$query->execute(array($id));
 
 header('content-type: text/xml');
 echo "<?xml version='1.0' ?>\n",
 	"<entity>\n";
-while ($row = pg_fetch_row($result)) {
+foreach ($query->fetchAll() as $row) {
 	echo "<attribute name='$row[1]' value='$row[2]'/>\n";
 }
 echo "<attribute name='type' value='source'/>\n",
