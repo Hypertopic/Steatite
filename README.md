@@ -15,7 +15,8 @@ Steatite is a server software. There is no need to install it on your own comput
 Installation requirements
 -------------------------
 
-- Apache Web server with PHP and rewrite module
+- Git client
+- Apache HTTP server with PHP and rewrite module
 - Netpbm (Linux, MacOS X, Mingw32)
 
 Installation procedure
