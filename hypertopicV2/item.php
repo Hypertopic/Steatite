@@ -30,10 +30,10 @@ function sendRow($item, $attribute, $value, &$isFirst) {
 header('content-type: application/json;charset=utf-8');
 echo '{"rows":[', "\n";
 $id = $_GET['id'];
-if (file_exists("picture/$id"))  {
+if (file_exists("../picture/$id"))  {
 	$url_prefix = 'http://'.$_SERVER['HTTP_HOST'];//TODO https and non root
 
-	$db = new PDO('sqlite:attribute/database');
+	$db = new PDO('sqlite:../attribute/database');
 	$query = $db->prepare(
 		'SELECT * FROM attributes WHERE source_id=?'
 	);

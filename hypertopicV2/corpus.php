@@ -17,8 +17,8 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details:
 http://www.gnu.org/licenses/gpl.html
 */
 
-$dir = opendir('picture');
-$db = new PDO('sqlite:attribute/database');
+$dir = opendir('../picture');
+$db = new PDO('sqlite:../attribute/database');
 $result = $db->query('SELECT * FROM attributes');
 $row = array();
 foreach ($result as $row) {

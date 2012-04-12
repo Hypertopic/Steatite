@@ -20,7 +20,7 @@ http://www.gnu.org/licenses/gpl.html
 $id = $_GET['id'];
 $url_prefix = 'http://'.$_SERVER['HTTP_HOST'];//TODO https and non root
 
-$db = new PDO('sqlite:attribute/database');
+$db = new PDO('sqlite:../attribute/database');
 $query = $db->prepare(
 	'SELECT * FROM attributes WHERE source_id=?'
 );

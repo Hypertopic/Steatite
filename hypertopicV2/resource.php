@@ -20,7 +20,7 @@ http://www.gnu.org/licenses/gpl.html
 header('content-type: application/json;charset=utf-8');
 echo '{"rows":[', "\n";
 $id = $_GET['id'];
-if (file_exists("picture/$id"))  {
+if (file_exists("../picture/$id"))  {
 	//TODO URL prefix for https and non root
 	echo '{"key":["http://', $_SERVER['HTTP_HOST'], '/picture/', $id, 
 		'"], "value":{"item":{"corpus":"00", "id":"', $id, '"}}}', "\n";
