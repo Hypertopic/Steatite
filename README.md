@@ -18,6 +18,7 @@ Installation requirements
 - Git client
 - Apache HTTP server with PHP and rewrite module
 - Netpbm (Linux, MacOS X, Mingw32)
+- SQLite 3
 
 Installation procedure
 ----------------------
@@ -25,3 +26,12 @@ Installation procedure
 - In a Web folder:
 
         git clone git@github.com:Hypertopic/Steatite.git
+        cd Steatite
+        mkdir -m 755 picture thumbnail attribute
+        sqlite3 attribute/database <schema.sql
+        chown -R www-data picture thumbnail attribute
+
+- If the last command threw an error, your system may use a different username for Apache-owned files. Change it accordingly.
+
+- Define the Steatite folder as the root folder of a virtual Web server.
+
