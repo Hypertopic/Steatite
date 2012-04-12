@@ -1,15 +1,15 @@
 Options -MultiViews
 RewriteEngine on
-RewriteRule ^entity/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$ fragment.php?id=$1&x1=$2&y1=$3&x2=$4&y2=$5
-RewriteRule ^entity/(.+)$ source.php?id=$1
-RewriteRule ^entity/$ sources.php
+RewriteRule ^entity/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$ hypertopicV1/fragment.php?id=$1&x1=$2&y1=$3&x2=$4&y2=$5
+RewriteRule ^entity/(.+)$ hypertopicV1/source.php?id=$1
+RewriteRule ^entity/$ hypertopicV1/sources.php
 RewriteRule ^thumbnail/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$ thumbnail.php?id=$1&x1=$2&y1=$3&x2=$4&y2=$5
 RewriteRule ^thumbnail/(.+)$ thumbnail.php?id=$1
 RewriteRule ^picture/(.+)$ picture.php?id=$1
 RewriteRule ^picture/$ pictures.php
-RewriteRule ^resource/.+picture/(.+)$ resource.php?id=$1
+RewriteRule ^resource/.+picture/(.+)$ hypertopicV1/resource.php?id=$1
 
-RewriteRule ^corpus/00$ corpus.php
-RewriteRule ^item/00/(.+)$ item.php?id=$1
-RewriteRule ^item/\?resource=.+picture/(.+)$ resourceV2.php?id=$1
-RewriteRule ^user/(.+)$ user.php?id=$1
+RewriteRule ^corpus/00$ hypertopicV2/corpus.php
+RewriteRule ^item/00/(.+)$ hypertopicV2/item.php?id=$1
+RewriteRule ^item/\?resource=.+picture/(.+)$ hypertopicV2/resource.php?id=$1
+RewriteRule ^user/(.+)$ hypertopicV2/user.php?id=$1
