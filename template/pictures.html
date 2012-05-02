@@ -1,21 +1,30 @@
 <html>
-  <head><title>Steatite</title></head>
+  <head>
+    <title>Steatite</title>
+    <link rel="stylesheet" type="text/css" href="../stylesheet.css" />    
+  </head>
   <body>
-    <header><nav>
-      <a href='..'>Corpora</a> > <b>{{corpus}}</b>
-    </nav></header>
+    <header>
+      <nav>
+        <a href='..'>Corpora</a> > 
+        <span id="here">
+          {{#corpus}}{{corpus}}{{/corpus}}
+          {{^corpus}}All pictures{{/corpus}}
+        </span>
+      </nav>
+      <form method='post' enctype='multipart/form-data'>
+        <input id="chooser" type='file' name='sources[]' multiple />
+        <button type='submit'>UPLOAD</button>
+      </form>
+    </header>
     <form>
       {{#pictures}}
-      <div>
-        <a href='{{id}}'><img border='0' src='../thumbnail/{{id}}' /></a>
-        <input type='checkbox' value='false' />
-        <input type='text' value='{{name}}' />
+      <div class="picture">
+        <a href='{{id}}'><img src='../thumbnail/{{id}}' /></a>
+        <p>{{name}}</p>
       </div>
       {{/pictures}}
     </form>
-    <form method='post' enctype='multipart/form-data'>
-      <input type='file' name='sources[]' size='40' multiple />
-      <input type='submit' value='UPLOAD' />
-    </form>
+    <footer id="bottom" />
   </body>
 </html>

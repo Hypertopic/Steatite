@@ -1,14 +1,25 @@
 <html>
-  <head><title>Steatite</title></head>
+  <head>
+    <title>Steatite</title>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css" />    
+  </head>
   <body>
-    <header><nav><b>Corpora</b></nav></header>
-    <a href='picture/'>All pictures ({{count}})</a>
-    {{#corpora}}
-      <a href='picture/?corpus={{id}}'>{{id}} ({{count}})</a>
-    {{/corpora}}
-    <footer><form method='get' action='picture/'>
-      <input type='text' name='corpus' size='12' placeholder='New corpus' />
-      <input type='submit' value='Add'/>
-    </form></footer>
+    <header>
+      <nav id="here">Corpora</nav>
+      <form method='get' action='picture/'>
+        <input type='text' name='corpus' size='12' placeholder='New corpus' />
+        <button type='submit'>Add</button>
+      </form>
+    </header>
+    <ul>
+      <li>
+        <a href='picture/'>All pictures ({{count}})</a>
+      </li>
+      {{#corpora}}
+        <li>
+          <a href='picture/?corpus={{id}}'>{{id}} ({{count}})</a>
+        </li>
+      {{/corpora}}
+    </ul>
   </body>
 </html>

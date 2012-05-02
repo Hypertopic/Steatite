@@ -23,9 +23,8 @@ $hasCorpus = isset($_GET['corpus']);
 switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'GET':
-  $corpusName = ($hasCorpus)? $_GET['corpus'] : 'All pictures';
   $data = array(
-    'corpus' => $corpusName
+    'corpus' => $_GET['corpus']
   );
   $statement = $db->prepare(
     ($hasCorpus)?
@@ -62,7 +61,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
       $statement->execute(array($id, 'corpus', $_GET['corpus'])); 
     }
   }
-  header('Location: '.$_SERVER['REQUEST_URI']);
+  header('Location: #bottom');
 }
 
 ?>

@@ -1,0 +1,69 @@
+body {
+  font-family: sans-serif;
+}
+
+header {
+  background-color: rgb(153, 40,0);
+}
+
+nav {
+  padding: 20px;
+  font-size: 200%;
+  color: rgb(230, 230, 230);
+}
+
+a {
+  text-decoration: none;
+}
+
+nav a {
+  color: rgb(230, 230, 230);
+}
+
+nav a:hover {
+  color: white;
+}
+
+#here {
+  color: white;
+}
+
+header form {
+  padding: 3px;
+  background-color: rgb(70, 60, 60);
+}
+
+#chooser {
+  background-color: rgb(70, 60, 60);
+  color: white;
+}
+
+.picture {
+  margin: 5px;
+  height: auto;
+  width: auto;
+  float: left;
+  text-align: center;
+  font-size: 60%;
+}
+
+img {
+  border: 2px solid white;
+}
+
+img:hover {
+  border: 2px solid rgb(188, 139, 52);
+}
+
+li a:link {
+  color: black;
+}
+
+li a:visited {
+  color: black;
+}
+
+li a:hover {
+  color: rgb(153, 40,0);
+}
+
