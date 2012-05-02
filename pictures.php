@@ -19,10 +19,10 @@ http://www.gnu.org/licenses/agpl.html
 
 include('lib/Mustache.php');
 $db = new PDO('sqlite:attribute/database');
+$hasCorpus = isset($_GET['corpus']);
 switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'GET':
-  $hasCorpus = isset($_GET['corpus']);
   $corpusName = ($hasCorpus)? $_GET['corpus'] : 'All pictures';
   $data = array(
     'corpus' => $corpusName
@@ -50,17 +50,17 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'POST':
   $uploads = $_FILES['sources'];
+  $statement =  $db->prepare(
+    'INSERT INTO attributes(source_id, attribute_name, attribute_value) VALUES (?, ?, ?)'
+  );
   for ($i=0; $i<count($uploads['name']); $i++) {
     $oldPath = $uploads['tmp_name'][$i];
     $id = sha1_file($oldPath);
     move_uploaded_file($oldPath, 'picture/'.$id);
-    $statement = $db->prepare(
-      'INSERT INTO attributes(source_id, attribute_name, attribute_value) VALUES (?, \'name\', ?)'
-    );
-    $statement->execute(array(
-      $id, 
-      $uploads['name'][$i]
-    )); 
+    $statement->execute(array($id, 'name', $uploads['name'][$i])); 
+    if ($hasCorpus) {
+      $statement->execute(array($id, 'corpus', $_GET['corpus'])); 
+    }
   }
   header('Location: '.$_SERVER['REQUEST_URI']);
 }
