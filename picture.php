@@ -20,6 +20,7 @@ http://www.gnu.org/licenses/gpl.html
 $id = 'picture/'.$_GET['id'];
 $mime = exec('file --brief --mime '.$id);
 header("content-type: $mime");
+header('Cache-Control: max-age=31536000');
 readfile($id);
 
 ?>

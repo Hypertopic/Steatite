@@ -40,6 +40,7 @@ if (!file_exists($destination) || filesize($destination)==0) {
 	}
 }
 header('content-type: image/jpeg');
+header('Cache-Control: max-age=31536000');
 readfile($destination);
 
 ?>
