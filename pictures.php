@@ -52,7 +52,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
   $uploads = $_FILES['sources'];
   for ($i=0; $i<count($uploads['name']); $i++) {
     $oldPath = $uploads['tmp_name'][$i];
-    $id = sha1_file($old_path);
+    $id = sha1_file($oldPath);
     move_uploaded_file($oldPath, 'picture/'.$id);
     $statement = $db->prepare(
       'INSERT INTO attributes(source_id, attribute_name, attribute_value) VALUES (?, \'name\', ?)'
