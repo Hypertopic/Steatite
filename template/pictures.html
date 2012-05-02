@@ -1,0 +1,17 @@
+<html>
+  <head><title>Steatite</title></head>
+  <body>
+    <header><nav>
+      <a href='..'>Corpora</a> > <b>{{corpus}}</b>
+    </nav></header>
+    <form>
+      {{#pictures}}
+      <div>
+        <a href='{{id}}'><img border='0' src='../thumbnail/{{id}}' /></a>
+        <input type='checkbox' value='false' />
+        <input type='text' value='{{name}}' />
+      </div>
+      {{/pictures}}
+    </form>
+  </body>
+</html>

@@ -17,34 +17,25 @@ PARTICULAR PURPOSE. See the GNU Affero General Public License for more details:
 http://www.gnu.org/licenses/agpl.html
 */
 
+include('lib/Mustache.php');
+
 $db = new PDO('sqlite:attribute/database');
-
-echo "<html>\n",
-  "<head>\n<title>Steatite</title>\n</head>\n",
-  "<body>\n",
-  "<header>\n<nav>\n",
-  "<b>Corpora</b>\n", //TODO i18n
-  "</nav>\n</header>\n";
-
 $count = 
   $db->query("SELECT count(distinct source_id) FROM attributes")->fetch();
-echo "<a href='picture/'> All pictures ($count[0])</a>"; //TODO first img
-
+$data = array(
+  'count' => $count[0]
+);
 $result = $db->query(
   "SELECT attribute_value, count(1) FROM attributes "
   ."WHERE attribute_name='corpus' GROUP BY attribute_value"
 );
 foreach ($result as $row) {
-  echo "<a href='picture/?corpus=$row[0]'>",
-    //TODO first img
-    "$row[0] ($row[1])", 
-    "</a>";
+  $data['corpora'][] = array(
+    'id' => $row[0],
+    'count' => $row[1]
+  );
 }
-
-echo "<footer><form method='get' action='picture/'>\n",
-  "<input type='text' name='corpus' size='12' placeholder='New corpus' />\n", //TODO i18n
-  "<input type='submit' value='Add'/>\n", //TODO i18n
-  "</form>\n</footer>\n",
-	"</body>\n</html>\n";
+$renderer = new Mustache();
+echo $renderer->render(file_get_contents('./template/index.html'), $data);
 
 ?>

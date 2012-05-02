@@ -17,20 +17,16 @@ PARTICULAR PURPOSE. See the GNU Affero General Public License for more details:
 http://www.gnu.org/licenses/agpl.html
 */
 
+include('lib/Mustache.php');
 $db = new PDO('sqlite:attribute/database');
-
 switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'GET':
   $hasCorpus = isset($_GET['corpus']);
   $corpusName = ($hasCorpus)? $_GET['corpus'] : 'All pictures';
-	echo "<html>\n",
-		"<head>\n<title>Steatite</title>\n</head>\n",
-		"<body>\n",
-    "<header>\n<nav>\n",
-    "<a href='..'>Corpora</a> > <b>$corpusName</b>\n", //TODO i18n
-    "</nav>\n</header>\n",
-    "<form>\n";
+  $data = array(
+    'corpus' => $corpusName
+  );
   $statement = $db->prepare(
     ($hasCorpus)?
       "SELECT a1.source_id, a1.attribute_value "
@@ -43,15 +39,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
   );
   $statement->execute(($hasCorpus)?array($_GET['corpus']):null);
   while ($row = $statement->fetch()) {
-    echo "<div>\n",
-      "<a href='$row[0]'><img border='0' src='../thumbnail/$row[0]' /></a>\n",
-      "<input type='checkbox' value='false' />\n",
-      "<input type='text' value='$row[1]' />\n",
-      "</div>\n";
+    $data['pictures'][] = array(
+      'id' => $row[0],
+      'name' => $row[1]
+    );
   }
-  echo "</form>\n",
-    "</body>\n",
-    "</html>";
+  $renderer = new Mustache();
+  echo $renderer->render(file_get_contents('./template/pictures.html'), $data);
 	break;
 
 	case 'POST':

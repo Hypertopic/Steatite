@@ -1,0 +1,14 @@
+<html>
+  <head><title>Steatite</title></head>
+  <body>
+    <header><nav><b>Corpora</b></nav></header>
+    <a href='picture/'>All pictures ({{count}})</a>
+    {{#corpora}}
+      <a href='picture/?corpus={{id}}'>{{id}} ({{count}})</a>
+    {{/corpora}}
+    <footer><form method='get' action='picture/'>
+      <input type='text' name='corpus' size='12' placeholder='New corpus' />
+      <input type='submit' value='Add'/>
+    </form></footer>
+  </body>
+</html>
