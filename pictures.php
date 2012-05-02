@@ -49,19 +49,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	break;
 
 	case 'POST':
-	$old_path = $_FILES['source']['tmp_name'];
-	$id = sha1_file($old_path);
-	$new_path = 'picture/'.$id;
-	move_uploaded_file($old_path, $new_path);
-	$statement = $db->prepare(
-		'INSERT INTO attributes(source_id, attribute_name, attribute_value) VALUES (?, \'name\', ?)'
-	);
-	$statement->execute(array(
-		$id, 
-		$_FILES['source']['name'])
-	); 
-  $root = 'http://'.$_SERVER['HTTP_HOST'];
-	header("Location: $root/$new_path");
+  $uploads = $_FILES['sources'];
+  for ($i=0; $i<count($uploads['name']); $i++) {
+    $oldPath = $uploads['tmp_name'][$i];
+    $id = sha1_file($old_path);
+    move_uploaded_file($oldPath, 'picture/'.$id);
+    $statement = $db->prepare(
+      'INSERT INTO attributes(source_id, attribute_name, attribute_value) VALUES (?, \'name\', ?)'
+    );
+    $statement->execute(array(
+      $id, 
+      $uploads['name'][$i]
+    )); 
+  }
+  header('Location: '.$_SERVER['REQUEST_URI']);
 }
 
 ?>
