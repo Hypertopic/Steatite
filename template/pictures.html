@@ -2,6 +2,30 @@
   <head>
     <title>Steatite</title>
     <link rel="stylesheet" type="text/css" href="../stylesheet.css" />    
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    function move() {
+      var destination = $("#destination").val();
+      var checked = $(":checked");
+      var countdown = checked.size();
+      checked.each(function() {
+        var picture = $(this).closest(".picture");
+        $.ajax({
+          type: "POST",
+          url: "../attributes.php?source_id=" + picture.attr("id")
+            + "&attribute_name=corpus&attribute_value=" + destination,
+          success: function() {
+            countdown--;
+            if (countdown<1) {
+              location.replace("?corpus=" + destination);
+            }
+          }
+        });
+      });
+    }
+
+    </script>
   </head>
   <body>
     <header>
@@ -15,13 +39,19 @@
       <form method='post' enctype='multipart/form-data'>
         <input id="chooser" type='file' name='sources[]' multiple />
         <button type='submit'>UPLOAD</button>
+        &nbsp; &nbsp; &nbsp;
+        <input type='text' id='destination' placeholder='Destination corpus' />        
+        <button type='button' onclick='move();'>MOVE</button>
       </form>
     </header>
     <form>
       {{#pictures}}
-      <div class="picture">
+      <div id='{{id}}' class='picture'>
         <a href='{{id}}'><img src='../thumbnail/{{id}}' /></a>
-        <p>{{name}}</p>
+        <div>
+          <input type='checkbox' />
+          <span>{{name}}</span>
+        </div>
       </div>
       {{/pictures}}
     </form>
