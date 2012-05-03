@@ -21,7 +21,10 @@ include('lib/Mustache.php');
 
 $db = new PDO('sqlite:attribute/database');
 $count = 
-  $db->query("SELECT count(distinct source_id) FROM attributes")->fetch();
+  $db->query(
+    "SELECT count(distinct source_id) FROM attributes WHERE source_id NOT IN "
+    ."(SELECT source_id FROM attributes WHERE attribute_name='corpus')"
+  )->fetch();
 $data = array(
   'count' => $count[0]
 );

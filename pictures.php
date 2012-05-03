@@ -32,9 +32,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
       ."FROM attributes a1, attributes a2 "
       ."WHERE a1.source_id=a2.source_id AND a1.attribute_name='name' "
       ."AND a2.attribute_name='corpus' AND a2.attribute_value=?"
-    : "SELECT source_id, attribute_value "
-      ."FROM attributes "
-      ."WHERE attribute_name='name'"
+    : "SELECT source_id, attribute_value FROM attributes "
+      ."WHERE attribute_name='name' AND source_id NOT IN ("
+      ."SELECT source_id FROM attributes WHERE attribute_name='corpus')"
   );
   $statement->execute(($hasCorpus)?array($_GET['corpus']):null);
   while ($row = $statement->fetch()) {

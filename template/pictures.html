@@ -18,11 +18,46 @@
           success: function() {
             countdown--;
             if (countdown<1) {
-              location.replace("?corpus=" + destination);
+              location.reload();
             }
           }
         });
       });
+    }
+
+    $(document).ready(function() {
+      resetUI();
+    });
+
+    function resetUI() {
+      $("header>form").replaceWith(
+        "<form>"
+        + "<button type='button' onclick='showUpload()'>Upload...</button>"
+        + "<button type='button' onclick='showMove()'>Move...</button>"
+        + "</form>"
+      );
+      $("input[type='checkbox']").remove();
+    }
+
+    function showUpload() {
+      $("header>form").replaceWith(
+        "<form method='post' enctype='multipart/form-data'>"
+        + "<input id='chooser' type='file' name='sources[]' multiple />"
+        + "<button onclick='resetUI()' type='button'>Cancel</button>"
+        + "<button type='submit'>Upload</button>"
+        + "</form>"
+      );
+    }
+
+    function showMove() {
+      $("header>form").replaceWith(
+        "<form>"
+        + "<input type='text' id='destination' placeholder='Destination corpus' />"
+        + "<button onclick='resetUI()' type='button'>Cancel</button>"
+        + "<button type='button' onclick='move()'>Move</button>"
+        + "</form>"
+      );
+      $(".picture>div").prepend("<input type='checkbox' />");
     }
 
     </script>
@@ -30,26 +65,19 @@
   <body>
     <header>
       <nav>
-        <a href='..'>Corpora</a> > 
+        <a href='..'>Pictures</a> > 
         <span id="here">
-          {{#corpus}}{{corpus}}{{/corpus}}
-          {{^corpus}}All pictures{{/corpus}}
+          {{corpus}}
+          {{^corpus}}Miscellanea{{/corpus}}
         </span>
       </nav>
-      <form method='post' enctype='multipart/form-data'>
-        <input id="chooser" type='file' name='sources[]' multiple />
-        <button type='submit'>UPLOAD</button>
-        &nbsp; &nbsp; &nbsp;
-        <input type='text' id='destination' placeholder='Destination corpus' />        
-        <button type='button' onclick='move();'>MOVE</button>
-      </form>
+      <form />
     </header>
     <form>
       {{#pictures}}
       <div id='{{id}}' class='picture'>
         <a href='{{id}}'><img src='../thumbnail/{{id}}' /></a>
         <div>
-          <input type='checkbox' />
           <span>{{name}}</span>
         </div>
       </div>
