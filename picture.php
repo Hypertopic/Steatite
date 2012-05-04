@@ -17,10 +17,14 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details:
 http://www.gnu.org/licenses/gpl.html
 */
 
-$id = 'picture/'.$_GET['id'];
-$mime = exec('file --brief --mime '.$id);
-header("content-type: $mime");
-header('Cache-Control: max-age=31536000');
-readfile($id);
+if (!isset($_SERVER['HTTP_IF_NONE_MATCH'])) { 
+  $id = 'picture/'.$_GET['id'];
+  $mime = exec('file --brief --mime '.$id);
+  header("content-type: $mime");
+  header('Etag: "ETERNAL"');
+  readfile($id);
+} else {
+  header('Not modified', true, 304);
+}
 
 ?>
