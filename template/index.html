@@ -1,5 +1,7 @@
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
     <title>Steatite</title>
     <link rel="stylesheet" type="text/css" href="stylesheet.css" />    
   </head>
@@ -17,7 +19,7 @@
       </li>
       {{#corpora}}
         <li>
-          <a href='picture/?corpus={{id}}'>{{id}} ({{count}})</a>
+          <a href='picture/?corpus={{{id}}}'>{{id}} ({{count}})</a>
         </li>
       {{/corpora}}
     </ul>
