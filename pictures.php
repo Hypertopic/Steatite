@@ -19,24 +19,33 @@ http://www.gnu.org/licenses/agpl.html
 
 include('lib/Mustache.php');
 $db = new PDO('sqlite:attribute/database');
-$hasCorpus = isset($_GET['corpus']);
+$hasCorpus = $_GET['corpus'];
 switch ($_SERVER['REQUEST_METHOD']) {
 
 	case 'GET':
   $data = array(
-    'corpus' => $_GET['corpus']
+    'corpus' => $_GET['corpus'],
+    'sort' => $_GET['sort']
   );
-  $statement = $db->prepare(
-    ($hasCorpus)?
-      "SELECT a1.source_id, a1.attribute_value "
+  $query = '';
+  $parameters = array();
+  if ($hasCorpus) {
+    $query = "SELECT a1.source_id, a1.attribute_value "
       ."FROM attributes a1, attributes a2 "
       ."WHERE a1.source_id=a2.source_id AND a1.attribute_name='name' "
-      ."AND a2.attribute_name='corpus' AND a2.attribute_value=?"
-    : "SELECT source_id, attribute_value FROM attributes "
-      ."WHERE attribute_name='name' AND source_id NOT IN ("
-      ."SELECT source_id FROM attributes WHERE attribute_name='corpus')"
-  );
-  $statement->execute(($hasCorpus)?array($_GET['corpus']):null);
+      ."AND a2.attribute_name='corpus' AND a2.attribute_value=?";
+    $parameters[] = $_GET['corpus'];
+  } else {
+    $query = "SELECT source_id, attribute_value FROM attributes "
+      ."WHERE attribute_name='name' AND source_id NOT IN "
+      ."(SELECT source_id FROM attributes WHERE attribute_name='corpus')";
+  }
+  $sort = (int) $_GET['sort'];
+  if ($sort==1 || $sort==2) {
+    $query .= " ORDER BY $sort COLLATE NOCASE";
+  }
+  $statement = $db->prepare($query);
+  $statement->execute($parameters);
   while ($row = $statement->fetch()) {
     $data['pictures'][] = array(
       'id' => $row[0],

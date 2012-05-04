@@ -45,16 +45,23 @@
       }, {
         tooltip: "Click to edit..."
       });
-
     });
 
     function resetUI() {
       $("header>form").replaceWith(
         "<form>"
         + "<button type='button' onclick='showUpload()'>Upload...</button>"
+        + "<input type='hidden' name='corpus' value='{{corpus}}' />"
+        + "<select name='sort'>"
+        + "<option value=''>Last modified</option>"
+        + "<option value='1'>Picture</option>"
+        + "<option value='2'>Name</option>"
+        + "</select>"
+        + "<button type='submit'>Sort</button>"
         + "<button type='button' onclick='showMove()'>Move...</button>"
         + "</form>"
       );
+      $("option[value='{{sort}}']").attr("selected", "selected");
       $("input[type='checkbox']").remove();
     }
 
