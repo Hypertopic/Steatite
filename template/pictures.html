@@ -5,6 +5,7 @@
     <title>Steatite</title>
     <link rel="stylesheet" type="text/css" href="../stylesheet.css" />    
     <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="http://www.appelsiini.net/download/jquery.jeditable.mini.js"></script>
     <script type="text/javascript">
 
     function move() {
@@ -27,8 +28,23 @@
       });
     }
 
+    function rename(id, value) {
+      $.ajax({
+        type: "POST",
+        url: "../attributes.php?source_id=" + id
+          + "&attribute_name=name&attribute_value=" + value
+      });
+      return value;
+    }
+
     $(document).ready(function() {
       resetUI();
+      $(".picture span").editable(function(value) {
+        return rename($(this).closest(".picture").attr("id"), value);
+      }, {
+        tooltip: "Click to edit..."
+      });
+
     });
 
     function resetUI() {
@@ -67,7 +83,7 @@
   <body>
     <header>
       <nav>
-        <a href='..'>Pictures</a> > 
+        <a href='..'>Pictures</a> &gt;
         <span id="here">
           {{corpus}}
           {{^corpus}}Miscellanea{{/corpus}}
