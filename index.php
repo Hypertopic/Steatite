@@ -19,26 +19,31 @@ http://www.gnu.org/licenses/agpl.html
 
 include('lib/Mustache.php');
 
-$db = new PDO('sqlite:attribute/database');
-$count = 
-  $db->query(
-    "SELECT count(distinct source_id) FROM attributes WHERE source_id NOT IN "
-    ."(SELECT source_id FROM attributes WHERE attribute_name='corpus')"
-  )->fetch();
-$data = array(
-  'count' => $count[0]
-);
-$result = $db->query(
-  "SELECT attribute_value, count(1) FROM attributes "
-  ."WHERE attribute_name='corpus' GROUP BY attribute_value"
-);
-foreach ($result as $row) {
-  $data['corpora'][] = array(
-    'id' => $row[0],
-    'count' => $row[1]
+if ('application/json'==$_SERVER['HTTP_ACCEPT']) {
+  header('content-type: application/json');
+  echo('{"service":"Steatite", "revision":"6.2012.05.16"}');
+} else {
+  $db = new PDO('sqlite:attribute/database');
+  $count = 
+    $db->query(
+      "SELECT count(distinct source_id) FROM attributes WHERE source_id NOT IN "
+      ."(SELECT source_id FROM attributes WHERE attribute_name='corpus')"
+    )->fetch();
+  $data = array(
+    'count' => $count[0]
   );
+  $result = $db->query(
+    "SELECT attribute_value, count(1) FROM attributes "
+    ."WHERE attribute_name='corpus' GROUP BY attribute_value"
+  );
+  foreach ($result as $row) {
+    $data['corpora'][] = array(
+      'id' => $row[0],
+      'count' => $row[1]
+    );
+  }
+  $renderer = new Mustache();
+  echo $renderer->render(file_get_contents('./template/index.html'), $data);
 }
-$renderer = new Mustache();
-echo $renderer->render(file_get_contents('./template/index.html'), $data);
 
 ?>
