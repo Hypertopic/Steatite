@@ -1,0 +1,8 @@
+{"rows":[
+  {"key":["{{{corpus}}}"], "value":{"name":"{{{corpus}}}"}}
+  {{#pictures}}, 
+    {"key":["{{{corpus}}}", "{{item}}"], "value":{"name":"{{{name}}}"}},
+    {"key":["{{{corpus}}}", "{{item}}"], "value":{"resource":"{{service}}/picture/{{item}}"}},
+    {"key":["{{{corpus}}}", "{{item}}"], "value":{"thumbnail":"{{service}}/thumbnail/{{item}}"}}
+  {{/pictures}}
+]}
