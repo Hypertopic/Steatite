@@ -1,0 +1,6 @@
+{"rows":[
+  {"key":["comment"], "value":"All corpora rather than user's corpora"}
+  {{#corpora}}, 
+    {"key":["{{{user}}}"], "value":{"corpus":{"id":"{{{id}}}", "name":"{{{id}}} ({{count}})"}}}
+  {{/corpora}}
+]}
