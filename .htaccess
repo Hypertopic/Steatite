@@ -9,5 +9,5 @@ RewriteRule ^picture/$ pictures.php
 
 RewriteRule ^corpus/(.+)$ hypertopicV2/corpus.php?corpus=$1
 RewriteRule ^item/(.+)/(.+)$ hypertopicV2/item.php?corpus=$1&item=$2
-RewriteRule ^item/\?resource=.+picture/(.+)$ hypertopicV2/resource.php?id=$1
+RewriteRule ^item/$ hypertopicV2/resource.php?%{QUERY_STRING}
 RewriteRule ^user/(.+)$ hypertopicV2/user.php?id=$1

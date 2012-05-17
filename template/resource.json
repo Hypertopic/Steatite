@@ -1,0 +1,5 @@
+{"rows":[
+  {{#corpus}}
+    {"key":["{{{resource}}}"], "value":{"item":{"corpus":"{{{corpus}}}","id":"{{{item}}}"}}}
+  {{/corpus}}
+]}

@@ -1,30 +1,40 @@
 <?php
 /*
-STEATITE - Web service for getting different views of archived documents
+STEATITE - Pictures archive for qualitative analysis
 
-Copyright (C) 2010 Aurelien Benel
+Copyright (C) 2010-2012 Aurelien Benel
 
 OFFICIAL WEB SITE
-http://www.hypertopic.org/index.php/Steatite
+http://www.hypertopic.org/
 
 LEGAL ISSUES
 This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU General Public License (version 2) as published by the
-Free Software Foundation.
+the terms of the GNU Affero General Public License as published by the Free 
+Software Foundation.
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the GNU General Public License for more details:
-http://www.gnu.org/licenses/gpl.html
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details:
+http://www.gnu.org/licenses/agpl.html
 */
 
-header('content-type: application/json;charset=utf-8');
-echo '{"rows":[', "\n";
-$id = $_GET['id'];
-if (file_exists("../picture/$id"))  {
-	//TODO URL prefix for https and non root
-	echo '{"key":["http://', $_SERVER['HTTP_HOST'], '/picture/', $id, 
-		'"], "value":{"item":{"corpus":"00", "id":"', $id, '"}}}', "\n";
-}
-echo ']}';
+include('../lib/Mustache.php');
+
+preg_match('#/picture/(.+)$#', $_GET['resource'], $matches); 
+$id = $matches[1];
+$db = new PDO('sqlite:../attribute/database');
+$query = $db->prepare(
+  "SELECT attribute_value FROM attributes "
+  ."WHERE source_id=? AND attribute_name='corpus'"
+);
+$query->execute(array($id));
+$result = $query->fetch();
+$data = array(
+  'corpus' => $result[0],
+  'item' => $id,
+  'resource' => $_GET['resource']
+);
+$renderer = new Mustache();
+header('content-type: application/json');
+echo $renderer->render(file_get_contents('../template/resource.json'), $data);
 
 ?>
