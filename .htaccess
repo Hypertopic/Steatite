@@ -7,9 +7,6 @@ RewriteRule ^thumbnail/(.+)$ thumbnail.php?id=$1
 RewriteRule ^picture/(.+)$ picture.php?id=$1
 RewriteRule ^picture/$ pictures.php
 
-RewriteRule ^entity/(.+)$ hypertopicV1/source.php?id=$1
-RewriteRule ^entity/$ hypertopicV1/sources.php
-
 RewriteRule ^corpus/(.+)$ hypertopicV2/corpus.php?corpus=$1
 RewriteRule ^item/(.+)/(.+)$ hypertopicV2/item.php?corpus=$1&item=$2
 RewriteRule ^item/\?resource=.+picture/(.+)$ hypertopicV2/resource.php?id=$1
