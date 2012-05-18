@@ -19,12 +19,13 @@ http://www.gnu.org/licenses/agpl.html
 
 include('../lib/Mustache.php');
 
-$db = new PDO('sqlite:../attribute/database');
+preg_match('#(.+)/corpus/#', $_SERVER['REQUEST_URI'], $path);
 $data = array(
   'corpus' => $_GET['corpus'],
-  'service' => 'http://'.$_SERVER['HTTP_HOST'], //TODO non root or with port
+  'service' => 'http://'.$_SERVER['HTTP_HOST'].$path[1], //TODO port
   'pictures' => array()
 );
+$db = new PDO('sqlite:../attribute/database');
 $query = $db->prepare(
   "SELECT a1.source_id, a1.attribute_value FROM attributes a1, attributes a2 "
   ."WHERE a1.source_id=a2.source_id AND a1.attribute_name='name' "

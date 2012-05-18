@@ -33,6 +33,4 @@ Installation procedure
 
 - If the last command threw an error, your system may use a different username for Apache-owned files. Change it accordingly.
 
-- Define the Steatite folder as the root folder of a virtual Web server.
-
 - Set Apache PATH environment to include `mkdir`, `file` and `anytopnm` (see wiki for OS-dependent procedures). 

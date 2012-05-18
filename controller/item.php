@@ -26,10 +26,11 @@ $query = $db->prepare(
 );
 $query->execute(array($_GET['item']));
 $result = $query->fetch();
+preg_match('#(.+)/item/#', $_SERVER['REQUEST_URI'], $path);
 $data = array(
   'corpus' => $_GET['corpus'],
   'item' => $_GET['item'],
-  'service' => 'http://'.$_SERVER['HTTP_HOST'], //TODO non root or with port
+  'service' => 'http://'.$_SERVER['HTTP_HOST'].$path[1], //TODO port
   'name' => $result[0]
 );
 $renderer = new Mustache();
