@@ -24,22 +24,25 @@ if ('application/json'==$_SERVER['HTTP_ACCEPT']) {
   echo('{"service":"Steatite", "revision":"6.2012.05.17"}');
 } else {
   $db = new PDO('sqlite:../attribute/database');
-  $count = 
+  $row = 
     $db->query(
-      "SELECT count(distinct source_id) FROM attributes WHERE source_id NOT IN "
+      "SELECT count(distinct source_id), max(source_id) FROM attributes "
+      ."WHERE source_id NOT IN "
       ."(SELECT source_id FROM attributes WHERE attribute_name='corpus')"
     )->fetch();
   $data = array(
-    'count' => $count[0]
+    'count' => $row[0],
+    'sample' => $row[1]
   );
   $result = $db->query(
-    "SELECT attribute_value, count(1) FROM attributes "
+    "SELECT attribute_value, count(1), max(source_id) FROM attributes "
     ."WHERE attribute_name='corpus' GROUP BY attribute_value"
   );
   foreach ($result as $row) {
     $data['corpora'][] = array(
       'id' => $row[0],
-      'count' => $row[1]
+      'count' => $row[1],
+      'sample' => $row[2]
     );
   }
   $renderer = new Mustache();
