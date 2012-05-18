@@ -35,3 +35,4 @@ Installation procedure
 
 - Define the Steatite folder as the root folder of a virtual Web server.
 
+- Set Apache PATH environment to include `mkdir`, `file` and `anytopnm` (see wiki for OS-dependent procedures). 
