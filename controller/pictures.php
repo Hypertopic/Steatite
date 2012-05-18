@@ -17,8 +17,8 @@ PARTICULAR PURPOSE. See the GNU Affero General Public License for more details:
 http://www.gnu.org/licenses/agpl.html
 */
 
-include('lib/Mustache.php');
-$db = new PDO('sqlite:attribute/database');
+include('../lib/Mustache.php');
+$db = new PDO('sqlite:../attribute/database');
 $hasCorpus = $_GET['corpus'];
 switch ($_SERVER['REQUEST_METHOD']) {
 
@@ -53,7 +53,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
     );
   }
   $renderer = new Mustache();
-  echo $renderer->render(file_get_contents('./template/pictures.html'), $data);
+  echo $renderer->render(file_get_contents('../view/pictures.html'), $data);
 	break;
 
 	case 'POST':
@@ -64,7 +64,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
   for ($i=0; $i<count($uploads['name']); $i++) {
     $oldPath = $uploads['tmp_name'][$i];
     $id = sha1_file($oldPath);
-    move_uploaded_file($oldPath, 'picture/'.$id);
+    move_uploaded_file($oldPath, '../picture/'.$id);
     $statement->execute(array($id, 'name', $uploads['name'][$i])); 
     if ($hasCorpus) {
       $statement->execute(array($id, 'corpus', $_GET['corpus'])); 

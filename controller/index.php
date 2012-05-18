@@ -17,13 +17,13 @@ PARTICULAR PURPOSE. See the GNU Affero General Public License for more details:
 http://www.gnu.org/licenses/agpl.html
 */
 
-include('lib/Mustache.php');
+include('../lib/Mustache.php');
 
 if ('application/json'==$_SERVER['HTTP_ACCEPT']) {
   header('content-type: application/json');
   echo('{"service":"Steatite", "revision":"6.2012.05.17"}');
 } else {
-  $db = new PDO('sqlite:attribute/database');
+  $db = new PDO('sqlite:../attribute/database');
   $count = 
     $db->query(
       "SELECT count(distinct source_id) FROM attributes WHERE source_id NOT IN "
@@ -43,7 +43,7 @@ if ('application/json'==$_SERVER['HTTP_ACCEPT']) {
     );
   }
   $renderer = new Mustache();
-  echo $renderer->render(file_get_contents('./template/index.html'), $data);
+  echo $renderer->render(file_get_contents('../view/index.html'), $data);
 }
 
 ?>

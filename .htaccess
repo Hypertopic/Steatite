@@ -2,12 +2,14 @@ Options -MultiViews
 Options +FollowSymLinks
 RewriteEngine on
 RewriteBase /~benel/steatite/
-RewriteRule ^thumbnail/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$ thumbnail.php?id=$1&x1=$2&y1=$3&x2=$4&y2=$5
-RewriteRule ^thumbnail/(.+)$ thumbnail.php?id=$1
-RewriteRule ^picture/(.+)$ picture.php?id=$1
-RewriteRule ^picture/$ pictures.php
 
-RewriteRule ^corpus/(.+)$ hypertopicV2/corpus.php?corpus=$1
-RewriteRule ^item/(.+)/(.+)$ hypertopicV2/item.php?corpus=$1&item=$2
-RewriteRule ^item/$ hypertopicV2/resource.php?%{QUERY_STRING}
-RewriteRule ^user/(.+)$ hypertopicV2/user.php?id=$1
+RewriteRule ^thumbnail/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$ controller/thumbnail.php?id=$1&x1=$2&y1=$3&x2=$4&y2=$5
+RewriteRule ^thumbnail/(.+)$ controller/thumbnail.php?id=$1
+RewriteRule ^picture/(.+)$ controller/picture.php?id=$1
+RewriteRule ^picture/$ controller/pictures.php
+RewriteRule ^$ controller/index.php
+
+RewriteRule ^corpus/(.+)$ controller/corpus.php?corpus=$1
+RewriteRule ^item/(.+)/(.+)$ controller/item.php?corpus=$1&item=$2
+RewriteRule ^item/$ controller/resource.php?%{QUERY_STRING}
+RewriteRule ^user/(.+)$ controller/user.php?id=$1

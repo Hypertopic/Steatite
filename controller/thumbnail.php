@@ -1,20 +1,20 @@
 <?php
 /*
-STEATITE - Web service for getting different views of archived documents
+STEATITE - Pictures archive for qualitative analysis
 
-Copyright (C) 2004-2009 Aurelien Benel
+Copyright (C) 2004-2012 Aurelien Benel
 
 OFFICIAL WEB SITE
-http://www.hypertopic.org/index.php/Steatite
+http://www.hypertopic.org/
 
 LEGAL ISSUES
 This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU General Public License (version 2) as published by the
-Free Software Foundation.
+the terms of the GNU Affero General Public License as published by the Free 
+Software Foundation.
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the GNU General Public License for more details:
-http://www.gnu.org/licenses/gpl.html
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details:
+http://www.gnu.org/licenses/agpl.html
 */
 
 if (!isset($_SERVER['HTTP_IF_NONE_MATCH'])) { 
@@ -23,9 +23,9 @@ if (!isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
   $y1 = $_GET['y1'];
   $x2 = $_GET['x2'];
   $y2 = $_GET['y2'];
-  $destination = "thumbnail/$id.$x1.$y1.$x2.$y2";
+  $destination = "../thumbnail/$id.$x1.$y1.$x2.$y2";
   if (!file_exists($destination) || filesize($destination)==0) {
-    $cmd = "anytopnm picture/$id";
+    $cmd = "anytopnm ../picture/$id";
     if (
       is_numeric($x1) && is_numeric($y1) 
       && is_numeric($x2) && is_numeric($y2)) 

@@ -21,20 +21,24 @@ include('../lib/Mustache.php');
 
 $db = new PDO('sqlite:../attribute/database');
 $data = array(
-  'user' => $_GET['id']
+  'corpus' => $_GET['corpus'],
+  'service' => 'http://'.$_SERVER['HTTP_HOST'], //TODO non root or with port
+  'pictures' => array()
 );
-$result = $db->query(
-  "SELECT attribute_value, count(1) FROM attributes "
-  ."WHERE attribute_name='corpus' GROUP BY attribute_value"
+$query = $db->prepare(
+  "SELECT a1.source_id, a1.attribute_value FROM attributes a1, attributes a2 "
+  ."WHERE a1.source_id=a2.source_id AND a1.attribute_name='name' "
+  ."AND a2.attribute_name='corpus' AND a2.attribute_value=?"
 );
-foreach ($result as $row) {
-  $data['corpora'][] = array(
-    'id' => $row[0],
-    'count' => $row[1]
+$query->execute(array($_GET['corpus']));
+while ($row = $query->fetch()) {
+  $data['pictures'][] = array(
+    'item' => $row[0],
+    'name' => $row[1]
   );
 }
 $renderer = new Mustache();
 header('content-type: application/json');
-echo $renderer->render(file_get_contents('../template/user.json'), $data);
+echo $renderer->render(file_get_contents('../view/corpus.json'), $data);
 
 ?>
