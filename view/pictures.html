@@ -10,7 +10,7 @@
 
     function move() {
       var destination = $("#destination").val();
-      var checked = $(":checked");
+      var checked = $(".picture :checked");
       var countdown = checked.size();
       checked.each(function() {
         var picture = $(this).closest(".picture");
@@ -29,7 +29,7 @@
     }
 
     function remove() {
-      var checked = $(":checked");
+      var checked = $(".picture :checked");
       var countdown = checked.size();
       checked.each(function() {
         var picture = $(this).closest(".picture");
@@ -54,6 +54,13 @@
         success: function() {location.reload();}
       });
       return value;
+    }
+
+    function toggleSelect() {
+      var checked = $("#toggle").is(":checked");
+      $("input[type='checkbox']").each(function() {
+        $(this).attr("checked", checked);
+      });
     }
 
     $(document).ready(function() {
@@ -99,6 +106,7 @@
         "<form>"
         + "<input type='text' id='destination' placeholder='Destination corpus' />"
         + "<button onclick='resetUI()' type='button'>Cancel</button>"
+        + "<input id='toggle' type='checkbox' onclick='toggleSelect()'>Select all</button>&nbsp;"
         + "<button type='button' onclick='move()'>Move</button>"
         + "</form>"
       );
@@ -109,6 +117,7 @@
       $("header>form").replaceWith(
         "<form>"
         + "<button onclick='resetUI()' type='button'>Cancel</button>"
+        + "<input id='toggle' type='checkbox' onclick='toggleSelect()'>Select all</button>&nbsp;"
         + "<button type='button' onclick='remove()'>Delete</button>"
         + "</form>"
       );

@@ -31,6 +31,8 @@ nav a:hover {
 header form {
   padding: 3px;
   background-color: rgb(70, 60, 60);
+  color: white;
+  font-size: 70%;
 }
 
 #chooser {
