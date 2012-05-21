@@ -19,29 +19,35 @@ http://www.gnu.org/licenses/agpl.html
 
 if (!isset($_SERVER['HTTP_IF_NONE_MATCH'])) { 
   $id = $_GET['id'];
-  $x1 = $_GET['x1'];
-  $y1 = $_GET['y1'];
-  $x2 = $_GET['x2'];
-  $y2 = $_GET['y2'];
-  $destination = "../thumbnail/$id.$x1.$y1.$x2.$y2";
-  if (!file_exists($destination) || filesize($destination)==0) {
-    $cmd = "anytopnm ../picture/$id";
-    if (
-      is_numeric($x1) && is_numeric($y1) 
-      && is_numeric($x2) && is_numeric($y2)) 
-    {
-      $cmd .= "| pamcut -left=$x1 -top=$y1 -right=$x2 -bottom=$y2";
+  $source = "../picture/$id";
+  if (file_exists($source)) {
+    $x1 = $_GET['x1'];
+    $y1 = $_GET['y1'];
+    $x2 = $_GET['x2'];
+    $y2 = $_GET['y2'];
+    $destination = "../thumbnail/$id.$x1.$y1.$x2.$y2";
+    if (!file_exists($destination) || filesize($destination)==0) {
+      $cmd = "anytopnm $source";
+      if (
+        is_numeric($x1) && is_numeric($y1) 
+        && is_numeric($x2) && is_numeric($y2)) 
+      {
+        $cmd .= "| pamcut -left=$x1 -top=$y1 -right=$x2 -bottom=$y2";
+      }
+      $cmd .= '| pnmscale -height 100'
+        . '| pnmtojpeg >'.$destination;
+      system($cmd, $error);
+      if ($error) {
+        exit("<p>Cannot execute the following command:</p><p>$cmd</p>");
+      }
     }
-    $cmd .= '| pnmscale -height 100'
-      . '| pnmtojpeg >'.$destination;
-    system($cmd, $error);
-    if ($error) {
-      exit("<p>Cannot execute the following command:</p><p>$cmd</p>");
-    }
+    header('content-type: image/jpeg');
+    header('Etag: "ETERNAL"');
+    readfile($destination);
+  } else {
+    header('Not found', true, 404);
+    echo("Picture '$id' not found.");
   }
-  header('content-type: image/jpeg');
-  header('Etag: "ETERNAL"');
-  readfile($destination);
 } else {
   header('Not modified', true, 304);
 }
