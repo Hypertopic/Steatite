@@ -13,19 +13,17 @@
         <button type='submit'>Add</button>
       </form>
     </header>
-    <ul>
+    <div class='picture'>
+      <a href='picture/'><img src='thumbnail/{{sample}}' /></a>
+      <div>Miscellanea ({{count}})</div>
+    </div>
+    {{#corpora}}
       <div class='picture'>
-        <a href='picture/'><img src='thumbnail/{{sample}}' /></a>
-        <div>Miscellanea ({{count}})</div>
+        <a href='picture/?corpus={{{id}}}'>
+          <img src='thumbnail/{{sample}}' />
+        </a>
+        <div>{{id}} ({{count}})</div>
       </div>
-      {{#corpora}}
-        <div class='picture'>
-          <a href='picture/?corpus={{{id}}}'>
-            <img src='thumbnail/{{sample}}' />
-          </a>
-          <div>{{id}} ({{count}})</div>
-        </div>
-      {{/corpora}}
-    </ul>
+    {{/corpora}}
   </body>
 </html>
