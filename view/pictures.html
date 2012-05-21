@@ -28,6 +28,24 @@
       });
     }
 
+    function remove() {
+      var checked = $(":checked");
+      var countdown = checked.size();
+      checked.each(function() {
+        var picture = $(this).closest(".picture");
+        $.ajax({
+          type: "DELETE",
+          url: "../attributes.php?source_id=" + picture.attr("id"),
+          success: function() {
+            countdown--;
+            if (countdown<1) {
+              location.reload();
+            }
+          }
+        });
+      });
+    }
+
     function rename(id, value) {
       $.ajax({
         type: "POST",
@@ -59,6 +77,7 @@
         + "</select>"
         + "<button type='submit'>Sort</button>"
         + "<button type='button' onclick='showMove()'>Move...</button>"
+        + "<button type='button' onclick='showDelete()'>Delete...</button>"
         + "</form>"
       );
       $("option[value='{{sort}}']").attr("selected", "selected");
@@ -81,6 +100,16 @@
         + "<input type='text' id='destination' placeholder='Destination corpus' />"
         + "<button onclick='resetUI()' type='button'>Cancel</button>"
         + "<button type='button' onclick='move()'>Move</button>"
+        + "</form>"
+      );
+      $(".picture>div").prepend("<input type='checkbox' />");
+    }
+
+    function showDelete() {
+      $("header>form").replaceWith(
+        "<form>"
+        + "<button onclick='resetUI()' type='button'>Cancel</button>"
+        + "<button type='button' onclick='remove()'>Delete</button>"
         + "</form>"
       );
       $(".picture>div").prepend("<input type='checkbox' />");
