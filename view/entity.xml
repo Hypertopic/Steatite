@@ -1,0 +1,7 @@
+<?xml version='1.0' ?>
+<entity>
+  <attribute name='type' value='source' />
+  <attribute name='name' value='{{{name}}}' />
+	<resource name='thumbnail' href='{{service}}/thumbnail/{{item}}' />
+	<resource name='source' href='{{service}}/picture/{{item}}' />
+</entity>

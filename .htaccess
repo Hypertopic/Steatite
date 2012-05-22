@@ -13,3 +13,4 @@ RewriteRule ^corpus/(.+)$ controller/corpus.php?corpus=$1
 RewriteRule ^item/(.+)/(.+)$ controller/item.php?corpus=$1&item=$2
 RewriteRule ^item/$ controller/resource.php?%{QUERY_STRING}
 RewriteRule ^user/(.+)$ controller/user.php?id=$1
+RewriteRule ^entity/(.+)$ controller/entity.php?id=$1
