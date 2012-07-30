@@ -21,7 +21,7 @@ include('../lib/Mustache.php');
 
 if ('application/json'==$_SERVER['HTTP_ACCEPT']) {
   header('content-type: application/json');
-  echo('{"service":"Steatite", "revision":"6.2012.05.22"}');
+  echo('{"service":"Steatite", "revision":"6.2012.07.30"}');
 } else {
   $db = new PDO('sqlite:../attribute/database');
   $row = 

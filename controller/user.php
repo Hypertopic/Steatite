@@ -17,24 +17,27 @@ PARTICULAR PURPOSE. See the GNU Affero General Public License for more details:
 http://www.gnu.org/licenses/agpl.html
 */
 
-include('../lib/Mustache.php');
-
 $db = new PDO('sqlite:../attribute/database');
-$data = array(
-  'user' => $_GET['id']
-);
+$user = $_GET['id'];
+$data = array('rows' => array());
 $result = $db->query(
   "SELECT attribute_value, count(1) FROM attributes "
   ."WHERE attribute_name='corpus' GROUP BY attribute_value"
 );
 foreach ($result as $row) {
-  $data['corpora'][] = array(
-    'id' => $row[0],
-    'count' => $row[1]
+  $id = $row[0];
+  $count = $row[1];
+  $data['rows'][] = array(
+    'key' => array($user),
+    'value' => array(
+      'corpus' => array(
+        'id' => $id,
+        'name' => "$id ($count)"
+      )
+    )
   );
 }
-$renderer = new Mustache();
 header('content-type: application/json');
-echo $renderer->render(file_get_contents('../view/user.json'), $data);
+echo json_encode($data);
 
 ?>
