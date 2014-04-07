@@ -35,4 +35,4 @@ Installation procedure
 
 - Set Apache PATH environment to include `mkdir`, `file` and `anytopnm` (see wiki for OS-dependent procedures). 
 
-- In `/etc/php5/apache2/php.ini` (or equivalent), set `upload_max_filesize` and `max_file_uploads` high enough for your mass uploading needs.
+- In `/etc/php5/apache2/php.ini` (or equivalent), set `upload_max_filesize`, `max_file_uploads` and `post_max_size` high enough for your mass uploading needs.
