@@ -18,6 +18,7 @@ http://www.gnu.org/licenses/agpl.html
 */
 
 include('../lib/Mustache.php');
+include('../metadata.php');
 
 $db = new PDO('sqlite:../attribute/database');
 $query = $db->prepare(
@@ -27,12 +28,20 @@ $query = $db->prepare(
 $query->execute(array($_GET['item']));
 $result = $query->fetch();
 preg_match('#(.+)/item/#', $_SERVER['REQUEST_URI'], $path);
+
+$source = "../picture/" . $_GET['item'];
+
+$metadata = Metadata::getMetadata($source);
+
 $data = array(
   'corpus' => $_GET['corpus'],
   'item' => $_GET['item'],
   'service' => 'http://'.$_SERVER['HTTP_HOST'].$path[1], //TODO port
-  'name' => $result[0]
+  'name' => $result[0],
+  'created' => $metadata['created'],
+  'spatial' => $metadata['spatial']
 );
+
 $renderer = new Mustache();
 header('content-type: application/json');
 echo $renderer->render(file_get_contents('../view/item.json'), $data);
