@@ -18,6 +18,7 @@ http://www.gnu.org/licenses/agpl.html
 */
 
 include('../lib/Mustache.php');
+include('../metadata.php');
 
 preg_match('#(.+)/corpus/#', $_SERVER['REQUEST_URI'], $path);
 $data = array(
@@ -31,11 +32,18 @@ $query = $db->prepare(
   ."WHERE a1.source_id=a2.source_id AND a1.attribute_name='name' "
   ."AND a2.attribute_name='corpus' AND a2.attribute_value=?"
 );
+
 $query->execute(array($_GET['corpus']));
 while ($row = $query->fetch()) {
+  $source = "../picture/" . $row[0];
+
+  $metadata = Metadata::getMetadata($source);
+
   $data['pictures'][] = array(
     'item' => $row[0],
-    'name' => $row[1]
+    'name' => $row[1],
+    'created' => $metadata['created'],
+    'spatial' => $metadata['spatial']
   );
 }
 $renderer = new Mustache();

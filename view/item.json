@@ -2,4 +2,10 @@
     {"key":["{{{corpus}}}", "{{item}}"], "value":{"name":"{{{name}}}"}},
     {"key":["{{{corpus}}}", "{{item}}"], "value":{"resource":"{{service}}/picture/{{item}}"}},
     {"key":["{{{corpus}}}", "{{item}}"], "value":{"thumbnail":"{{service}}/thumbnail/{{item}}"}}
+    {{#created}},
+    {"key":["{{{corpus}}}", "{{item}}"], "value":{"created":"{{{created}}}"}}
+    {{/created}}
+    {{#spatial}},
+	{"key":["{{{corpus}}}", "{{item}}"], "value":{"spatial":"{{{spatial}}}"}}
+    {{/spatial}}
 ]}
