@@ -6,6 +6,6 @@
     {"key":["{{{corpus}}}", "{{item}}"], "value":{"created":"{{{created}}}"}}
     {{/created}}
     {{#spatial}},
-	{"key":["{{{corpus}}}", "{{item}}"], "value":{"spatial":"{{{spatial}}}"}}
+	{"key":["{{{corpus}}}", "{{item}}"], "value":{"spatial":"{{spatial}}"}}
     {{/spatial}}
 ]}
