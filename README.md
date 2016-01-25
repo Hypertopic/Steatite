@@ -18,6 +18,7 @@ Installation requirements
 - Git client
 - Apache HTTP server with PHP and rewrite module
 - Netpbm (Linux, MacOS X, Mingw32)
+- ExifTool
 - SQLite 3
 
 Installation procedure
