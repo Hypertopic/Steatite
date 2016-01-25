@@ -16,7 +16,7 @@ class Metadata {
 	private static $_OPTIONS = array(
 		"d %Y-%m-%d",
 		"q",
-		"php"
+    "s2"
 	);
 
 	public static function getMetadata($resource) {
@@ -34,29 +34,16 @@ class Metadata {
 
 		$cmd .= " " . $resource;
 
-		eval('$metadata=' . `$cmd`);
-
-		return self::conformResponse($metadata[0]);
-	}
-
-	/**
-	 * Change keys name in order to be conform with DublinCore metadata namespace
-	 */
-	private static function conformResponse($res) {
-		foreach ($res as $key => $value) {
-			if(!empty($value) && array_key_exists($key, self::$_TAGS)) {
-				$res[self::$_TAGS[$key]] = $res[$key];
-			}
-
-			// Unset all unused data
-			unset($res[$key]);
-		}
-
-		return $res;
+    exec($cmd, $exif);
+    $dublin_core = array();
+    foreach ($exif as $attribute) {
+      $key_value = explode(": ", $attribute, 2);
+      $dublin_core[self::$_TAGS[$key_value[0]]] =
+        str_replace('"', '\"', $key_value[1]);
+    }
+		return $dublin_core;
 	}
 
 }
-
-
 
 ?>
