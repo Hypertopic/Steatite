@@ -37,13 +37,9 @@ $query->execute(array($_GET['corpus']));
 while ($row = $query->fetch()) {
   $source = "../picture/" . $row[0];
 
-  $metadata = Metadata::getMetadata($source);
-
   $data['pictures'][] = array(
     'item' => $row[0],
-    'name' => $row[1],
-    'created' => $metadata['created'],
-    'spatial' => $metadata['spatial']
+    'name' => $row[1]
   );
 }
 $renderer = new Mustache();
