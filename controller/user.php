@@ -38,6 +38,7 @@ foreach ($result as $row) {
   );
 }
 header('content-type: application/json');
+header('Access-Control-Allow-Origin: *');
 echo json_encode($data);
 
 ?>

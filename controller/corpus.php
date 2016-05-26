@@ -44,6 +44,7 @@ while ($row = $query->fetch()) {
 }
 $renderer = new Mustache();
 header('content-type: application/json');
+header('Access-Control-Allow-Origin: *');
 echo $renderer->render(file_get_contents('../view/corpus.json'), $data);
 
 ?>
