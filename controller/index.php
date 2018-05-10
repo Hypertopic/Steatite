@@ -40,7 +40,7 @@ if ('application/json'==$_SERVER['HTTP_ACCEPT']) {
   );
   foreach ($result as $row) {
     $data['corpora'][] = array(
-      'id' => $row[0],
+      'id' => str_replace("'", "&apos;", $row[0]),
       'count' => $row[1],
       'sample' => $row[2]
     );
