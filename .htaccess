@@ -12,5 +12,5 @@ RewriteRule ^$ controller/index.php
 RewriteRule ^corpus/(.+)$ controller/corpus.php?corpus=$1
 RewriteRule ^item/(.+)/(.+)$ controller/item.php?corpus=$1&item=$2
 RewriteRule ^item/$ controller/resource.php?%{QUERY_STRING}
-RewriteRule ^(user|viewpoint|topic|attribute)/(.+)$ view/empty_view.json
+RewriteRule ^(user|viewpoint|topic|attribute)/(.+)$ controller/empty.php
 RewriteRule ^entity/(.+)$ controller/entity.php?id=$1
