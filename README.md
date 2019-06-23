@@ -41,85 +41,98 @@ Installation procedure
 
 Features
 ------------------------
-
 Steatite is a service of image analysis designed in accordance with the Hypertopic protocol. Thus for compatibily reasons, some services had to be implemented but does not have really interest for Steatite. That's why some services are implemented but will return an empty JSON table. See [Hypertopic Protocol](https://github.com/Hypertopic/Protocol) for more informations.
 Here's a description of the features offered by Steatite. For each features, you have the pattern of the request followed with an example. 
 
-__• To display a picture__ 
+__To display a picture__ 
 
 The picture will be displayed in the format it was initially upload.
 
-`^picture/(.+)$`
-
-[Picture Example](http://steatite.hypertopic.org/picture/c4ced98095164137e2df8ab7aa6e9e3740b12a96)
+  `picture/{image hash}`
 
 
-__• To display a thumbnail__
+  [Picture Example](http://steatite.hypertopic.org/picture/c4ced98095164137e2df8ab7aa6e9e3740b12a96)
+
+
+
+__To display a thumbnail__
  
-Type `thumbnail` instead of `picture` in your request. 
+   Type `thumbnail` instead of `picture` in your request. 
 
-`^thumbnail/(.+)$`
+   `thumbnail/{image hash}`
+   
+   [![Thumbnail Example](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96)](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96)
 
-[![thumbnail-example](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96)](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96)
+__To display a fragment of a thumbnail__
 
-__• To display a fragment__
+You can display only a fragment of a thumbnail by adding four coordinates, each separated with a  `+`  at the end of your request. The four digits are coordinates - in pixels - that represents two points in the original image and create a rectangle that will be the diplayed fragment. 
+  The two first digits are the coordinates of the first point, respectively the abscissa and ordinate. The third and fourth digits are respectively the abscissa and ordinate of the second point. 
 
-You can display only a fragment of a picture by adding four coordinates, each separated with a  `+`  at the end of your request. The four digits `(\d+)` are coordinates - in pixels - that represents two points in the original image and create a rectangle that will be the diplayed fragment. 
-The two first digits are the coordinates of the first point, respectively the abscissa and ordinate. The third and fourth digits are respectively the abscissa and ordinate of the second point. 
+   `thumbnail/{image hash}/{x1}+{y1}+{x2}+{y2}`
+    
+  
 
-`^thumbnail/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$`
+  For example if you want to display only the face of the character at the left of the picture, you can type this : 
 
-For example if you want to display only the face of the character at the left of the picture, you can type this : 
-<http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000>
+  <http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000>
 
-Here's what you will get : 
+  Here's what you will get : 
 
-[![fragment-example](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000)](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000)
+   [![Thumbnail Example](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000)](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000)
 
-__• To display attributes related to a picture in JSON format__
+__To display attributes related to an item in JSON format__
 
 You can access to the metadatas related to a picture or thumbnail by typing `item` in your request. Thus, you will access to the picture or thumbnail id, name, the date on which the picture was taken and possibly the localisation of the picture if this attribute is available for the picture.
-`^item/picture/(.+)$`
-   
-Here's what will display with this request : 
-<http://steatite.hypertopic.org/item/picture/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
-   
-```json
-  {
-    "rows":[
-        {"key":["picture", "0f9fa45500958406f667075d66180582d735d6c1"], "value":{"name":"Amp15b.jpg"}},
-        {"key":["picture", "0f9fa45500958406f667075d66180582d735d6c1"], "value":{"resource":"http://steatite.hypertopic.org/picture/0f9fa45500958406f667075d66180582d735d6c1"}},
-      {"key":["picture", "0f9fa45500958406f667075d66180582d735d6c1"], "value":{"thumbnail":"http://steatite.hypertopic.org/thumbnail/0f9fa45500958406f667075d66180582d735d6c1"}},
-      {"key":["picture", "0f9fa45500958406f667075d66180582d735d6c1"], "value":{"created":"2007-04-20"}}
-      ]
-  }
-```
 
-__• To display attributes related to a thumbnail in JSON format__
+   `item/{corpus name}/{image hash}`
 
-You can also display the attributed related to a thumbnail. 
-`^item/thumbnail/(.+)$`
-   
-Here's what will display with this request : 
-<http://steatite.hypertopic.org/item/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
+   <http://steatite.hypertopic.org/item/Vitraux%20-%20BÃ©nel/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
 
 ```json
   {
     "rows":[
-        {"key":["thumbnail", "0f9fa45500958406f667075d66180582d735d6c1"], "value":{"name":"Amp15b.jpg"}},
-        {"key":["thumbnail", "0f9fa45500958406f667075d66180582d735d6c1"], "value":{"resource":"http://steatite.hypertopic.org/picture/0f9fa45500958406f667075d66180582d735d6c1"}},
-        {"key":["thumbnail", "0f9fa45500958406f667075d66180582d735d6c1"], "value":{"thumbnail":"http://steatite.hypertopic.org/thumbnail/0f9fa45500958406f667075d66180582d735d6c1"}},
-        {"key":["thumbnail", "0f9fa45500958406f667075d66180582d735d6c1"], "value":{"created":"2007-04-20"}}
-      ]
+      {
+        "key":["Vitraux - BÃƒÂ©nel", "c4ced98095164137e2df8ab7aa6e9e3740b12a96", 
+      "value":
+              {
+                "name":"GRD 002"
+              }
+      },
+      {
+        "key":["Vitraux - BÃƒÂ©nel", "c4ced98095164137e2df8ab7aa6e9e3740b12a96", 
+      "value":
+                {
+                  "resource":"http://steatite.hypertopic.org/picture/c4ced98095164137e2df8ab7aa6e9e3740b12a96"
+                }
+      },
+      {
+        "key":["Vitraux - BÃƒÂ©nel", "c4ced98095164137e2df8ab7aa6e9e3740b12a96", 
+      "value":
+                {
+                  "thumbnail":"http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96"
+                }
+      },
+      {
+        "key":["Vitraux - BÃƒÂ©nel", "c4ced98095164137e2df8ab7aa6e9e3740b12a96"],
+       "value":
+                {
+                  "created":"2019-02-24"
+                }
+      },
+      {
+        "key":["Vitraux - BÃƒÂ©nel", "c4ced98095164137e2df8ab7aa6e9e3740b12a96"], 
+      "value":
+                {
+                  "spatial":"48 deg 18' 26.88\" N, 4 deg 19' 18.32\" E"
+                }
+      }
+    ]
   }
 ```
 
-__• To display attributes in XML format__
+__To display attributes in XML format__
   
-`^entity/(.+)$`
-
-Here's what will display with this request : 
-<http://steatite.hypertopic.org/entity/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
+`entity/{image hash}`
 
 ```xml
   <entity>
@@ -130,14 +143,11 @@ Here's what will display with this request :
   </entity>
 ```
 
-__• To access all the items of a corpus__
+__To access all the items of a corpus__
 
-You can access to the list of all pictures contained in a corpus.
-`^corpus/(.+)$` 
-   
-Here's what will display with this request : 
+  You can access to the list of all pictures contained in a corpus.
 
-<http://steatite.hypertopic.org/corpus/Vitraux%20-%20Bénel>
+   `^corpus/{corpus name}` 
    
 ```json
   {
