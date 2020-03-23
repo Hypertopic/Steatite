@@ -1,8 +1,6 @@
 Steatite – Pictures archive for qualitative analysis
 ====================================================
 
-License: [GNU Affero General Public License](http://www.gnu.org/licenses/agpl.html)
-
 Contact: <aurelien.benel@utt.fr>
 
 Home page: <https://github.com/Hypertopic/Steatite>
