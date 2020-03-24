@@ -5,33 +5,14 @@ Contact: <aurelien.benel@utt.fr>
 
 Home page: <https://github.com/Hypertopic/Steatite>
 
-Notice
-------
 
-Steatite is a server software. There is no need to install it on your own computer to use it. The usual way is to be "hosted" by one's own institution (ask your system administrator). If your use cases meet our research interests, we can also host your data on our community server.
+## Requirements
 
-Installation requirements
--------------------------
+* [Docker Engine](https://docs.docker.com/install/)
 
-- Git client
-- Apache HTTP server with PHP and rewrite module
-- Netpbm (Linux, MacOS X, Mingw32)
-- ExifTool
-- SQLite 3
 
-Installation procedure
-----------------------
+## How to use this image
 
-- In a Web folder:
-
-        git clone git@github.com:Hypertopic/Steatite.git
-        cd Steatite
-        mkdir -m 755 picture thumbnail attribute
-        sqlite3 attribute/database <schema.sql
-        chown -R www-data picture thumbnail attribute
-
-- If the last command threw an error, your system may use a different username for Apache-owned files. Change it accordingly.
-
-- Set Apache PATH environment to include `mkdir`, `file` and `anytopnm` (see wiki for OS-dependent procedures). 
-
-- In `/etc/php5/apache2/php.ini` (or equivalent), set `upload_max_filesize`, `max_file_uploads` and `post_max_size` high enough for your mass uploading needs.
+```
+docker run -p 80:80 -v steatite-data:/var/www/html/attribute -v steatite-pictures:/var/www/html/picture benel/steatite
+```
