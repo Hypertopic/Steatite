@@ -23,7 +23,7 @@ include('../metadata.php');
 preg_match('#(.+)/corpus/#', $_SERVER['REQUEST_URI'], $path);
 $data = array(
   'corpus' => $_GET['corpus'],
-  'service' => 'http://'.$_SERVER['HTTP_HOST'].$path[1], //TODO port
+  'service' => 'http://'.$_SERVER['HTTP_HOST'].$path[1],
   'pictures' => array()
 );
 $db = new PDO('sqlite:../data/attributes');

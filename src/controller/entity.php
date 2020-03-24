@@ -29,7 +29,7 @@ $result = $query->fetch();
 preg_match('#(.+)/entity/#', $_SERVER['REQUEST_URI'], $path);
 $data = array(
   'item' => $_GET['id'],
-  'service' => 'http://'.$_SERVER['HTTP_HOST'].$path[1], //TODO port
+  'service' => 'http://'.$_SERVER['HTTP_HOST'].$path[1],
   'name' => $result[0]
 );
 $renderer = new Mustache();
