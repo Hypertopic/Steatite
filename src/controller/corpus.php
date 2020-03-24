@@ -26,7 +26,7 @@ $data = array(
   'service' => 'http://'.$_SERVER['HTTP_HOST'].$path[1], //TODO port
   'pictures' => array()
 );
-$db = new PDO('sqlite:../attribute/database');
+$db = new PDO('sqlite:../data/attributes');
 $query = $db->prepare(
   "SELECT a1.source_id, a1.attribute_value FROM attributes a1, attributes a2 "
   ."WHERE a1.source_id=a2.source_id AND a1.attribute_name='name' "
@@ -35,8 +35,6 @@ $query = $db->prepare(
 
 $query->execute(array($_GET['corpus']));
 while ($row = $query->fetch()) {
-  $source = "../picture/" . $row[0];
-
   $data['pictures'][] = array(
     'item' => $row[0],
     'name' => $row[1]

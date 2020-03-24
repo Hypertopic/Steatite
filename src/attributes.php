@@ -17,14 +17,14 @@ PARTICULAR PURPOSE. See the GNU Affero General Public License for more details:
 http://www.gnu.org/licenses/agpl.html
 */
 
+$db = new PDO('sqlite:data/attributes');
+
 switch ($_SERVER['REQUEST_METHOD']) {
   
   case 'POST':
   $item = $_GET['source_id'];
   $attribute = $_GET['attribute_name'];
   $value = $_GET['attribute_value'];
-
-  $db = new PDO('sqlite:attribute/database');
   $deleteStatement =  $db->prepare(
     'DELETE FROM attributes WHERE source_id=? AND attribute_name=?'
   );
@@ -36,7 +36,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
   break;
 
   case 'DELETE':
-  $db = new PDO('sqlite:attribute/database');
   $deleteStatement =  $db->prepare(
     'DELETE FROM attributes WHERE source_id=?'
   );

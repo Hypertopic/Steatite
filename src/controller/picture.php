@@ -19,7 +19,7 @@ http://www.gnu.org/licenses/agpl.html
 
 if (!isset($_SERVER['HTTP_IF_NONE_MATCH'])) { 
   $id = $_GET['id'];
-  $source = "../picture/$id";
+  $source = "../data/$id";
   if (file_exists($source)) {
     $mime = exec('file --brief --mime '.$source);
     header("content-type: $mime");

@@ -23,7 +23,7 @@ if ('application/json'==$_SERVER['HTTP_ACCEPT']) {
   header('content-type: application/json');
   echo('{"service":"Steatite", "revision":"6.2016.01.26"}');
 } else {
-  $db = new PDO('sqlite:../attribute/database');
+  $db = new PDO('sqlite:../data/attributes');
   $row = 
     $db->query(
       "SELECT count(distinct source_id), max(source_id) FROM attributes "

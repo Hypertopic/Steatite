@@ -18,7 +18,7 @@ http://www.gnu.org/licenses/agpl.html
 */
 
 include('../lib/Mustache.php');
-$db = new PDO('sqlite:../attribute/database');
+$db = new PDO('sqlite:../data/attributes');
 $hasCorpus = $_GET['corpus'];
 switch ($_SERVER['REQUEST_METHOD']) {
 
@@ -64,7 +64,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
   for ($i=0; $i<count($uploads['name']); $i++) {
     $oldPath = $uploads['tmp_name'][$i];
     $id = sha1_file($oldPath);
-    move_uploaded_file($oldPath, '../picture/'.$id);
+    move_uploaded_file($oldPath, '../data/'.$id);
     $statement->execute(array($id, 'name', $uploads['name'][$i])); 
     if ($hasCorpus) {
       $statement->execute(array($id, 'corpus', $_GET['corpus'])); 

@@ -20,7 +20,7 @@ http://www.gnu.org/licenses/agpl.html
 include('../lib/Mustache.php');
 include('../metadata.php');
 
-$db = new PDO('sqlite:../attribute/database');
+$db = new PDO('sqlite:../data/attributes');
 $query = $db->prepare(
   "SELECT attribute_value FROM attributes "
   ."WHERE source_id=? AND attribute_name='name'"
@@ -29,7 +29,7 @@ $query->execute(array($_GET['item']));
 $result = $query->fetch();
 preg_match('#(.+)/item/#', $_SERVER['REQUEST_URI'], $path);
 
-$source = "../picture/" . $_GET['item'];
+$source = "../data/" . $_GET['item'];
 
 $metadata = Metadata::getMetadata($source);
 

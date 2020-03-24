@@ -19,7 +19,7 @@ http://www.gnu.org/licenses/agpl.html
 
 include('../lib/Mustache.php');
 
-$db = new PDO('sqlite:../attribute/database');
+$db = new PDO('sqlite:../data/attributes');
 $query = $db->prepare(
   "SELECT attribute_value FROM attributes "
   ."WHERE source_id=? AND attribute_name='name'"

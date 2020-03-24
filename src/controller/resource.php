@@ -21,7 +21,7 @@ include('../lib/Mustache.php');
 
 preg_match('#/picture/(.+)$#', $_GET['resource'], $matches); 
 $id = $matches[1];
-$db = new PDO('sqlite:../attribute/database');
+$db = new PDO('sqlite:../data/attributes');
 $query = $db->prepare(
   "SELECT attribute_value FROM attributes "
   ."WHERE source_id=? AND attribute_name='corpus'"
