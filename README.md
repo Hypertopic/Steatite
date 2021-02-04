@@ -11,11 +11,12 @@ Home page: <https://github.com/Hypertopic/Steatite>
 * [Docker Engine](https://docs.docker.com/install/)
 
 
-## How to use this image
+## Installation procedure
 
-```
-docker run -p 80:80 -v steatite-data:/var/www/html/data benel/steatite
-```
+    docker-compose up -d steatite
+
+Steatite (API endpoint and user interface) is now available at <http://localhost/>.
+
 
 ## Functional features
 

@@ -1,0 +1,16 @@
+port: 1337
+service: steatite:80
+path: ''
+authenticationService: couchdb:5984
+logFormat: dev
+session:
+  proxy: true
+  cookie:
+    sameSite: none
+    secure: auto
+  secret: TO_BE_CHANGED2
+  resave: false
+  saveUninitialized: false
+  unset: destroy
+cors:
+  origin: '*'

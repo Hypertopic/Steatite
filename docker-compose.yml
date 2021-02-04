@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+
+  steatite:
+    image: benel/steatite
+    volumes:
+      - ./data:/var/www/html/data
+
+  proxy:
+    image: benel/aaaforrest
+    ports:
+      - 80:1337
+    volumes:
+      - ./conf/aaaforrest.yml:/AAAforREST/conf/config.yml:ro
+    working_dir: /AAAforREST
+    depends_on:
+      - steatite
+
+networks:
+  default:
+    external:
+      name: argos_default
