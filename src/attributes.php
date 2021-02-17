@@ -5,7 +5,7 @@ STEATITE - Pictures archive for qualitative analysis
 Copyright (C) 2012 Aurelien Benel
 
 OFFICIAL WEB SITE
-http://www.hypertopic.org/
+https://hypertopic.org/steatite
 
 LEGAL ISSUES
 This program is free software; you can redistribute it and/or modify it under
