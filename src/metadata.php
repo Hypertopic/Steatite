@@ -44,6 +44,13 @@ class Metadata {
 		return $dublin_core;
 	}
 
+	public static function getURI($path) {
+    return 'http'
+      .(isset($_SERVER['HTTPS']) ? 's' : '')
+      .'://'
+      .$_SERVER['HTTP_HOST']
+      .$path[1];
+  }
 }
 
 ?>
