@@ -19,6 +19,8 @@ class Metadata {
     "s2"
 	);
 
+  private static $_SECURE = TRUE; // TODO configuration file or environment variable
+
 	public static function getMetadata($resource) {
 		$cmd = "exiftool";
 
@@ -46,7 +48,7 @@ class Metadata {
 
 	public static function getURI($path) {
     return 'http'
-      .(isset($_SERVER['HTTPS']) ? 's' : '')
+      .(self::$_SECURE ? 's' : '')
       .'://'
       .$_SERVER['HTTP_HOST']
       .$path[1];
