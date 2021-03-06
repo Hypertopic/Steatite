@@ -50,8 +50,7 @@
       $.ajax({
         type: "POST",
         url: "../attributes.php?source_id=" + id
-          + "&attribute_name=name&attribute_value=" + value,
-        success: function() {location.reload();}
+          + "&attribute_name=name&attribute_value=" + value
       });
       return value;
     }
