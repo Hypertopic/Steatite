@@ -28,15 +28,15 @@ It also complies with the [Hypertopic protocol](https://github.com/Hypertopic/Pr
 
 API: `/picture/{hash}`
 
-Example: <http://steatite.hypertopic.org/picture/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
+Example: <https://steatite.utt.fr/picture/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
 
 ### Get a JPEG thumbnail (efficiently)
 
 API: `/thumbnail/{hash}`
 
-Example: <http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
+Example: <https://steatite.utt.fr/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
 
-![thumbnail-example](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96)
+![thumbnail-example](https://steatite.utt.fr/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96)
 
 ### Get a JPEG thumbnail of a fragment (efficiently)
 
@@ -46,11 +46,11 @@ You can display only a fragment of a picture by adding four coordinates, each se
 The two first digits are the coordinates of the first point, respectively the abscissa and ordinate. The third and fourth digits are respectively the abscissa and ordinate of the second point.
 
 For example if you want to display only the face of the character at the left of the picture, you can type this:
-<http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000>
+<https://steatite.utt.fr/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000>
 
 And you will get this:
 
-![fragment-example](http://steatite.hypertopic.org/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000)
+![fragment-example](https://steatite.utt.fr/thumbnail/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000)
 
 ### Get attributes related to a picture in JSON (Hypertopic v2)
 
@@ -61,15 +61,15 @@ you will get the shooting date and the geolocation if they are present in the EX
 Please note that the name is the original filename but it can be changed through the user interface.
 
 For example, if you request the following URI:
-<http://steatite.hypertopic.org/item/Vitraux+-+Bénel/1f3fe412f1042cbb6d42841123cf6c7e7fac309f>
+<https://steatite.utt.fr/item/Vitraux+-+Bénel/1f3fe412f1042cbb6d42841123cf6c7e7fac309f>
 
 The response will be:
 
 ```yaml
 {"rows":[
   {"key":["Vitraux - Bénel", "1f3fe412f1042cbb6d42841123cf6c7e7fac309f"], "value":{"name":"GRD 002"}},
-  {"key":["Vitraux - Bénel", "1f3fe412f1042cbb6d42841123cf6c7e7fac309f"], "value":{"resource":"http://steatite.hypertopic.org/picture/1f3fe412f1042cbb6d42841123cf6c7e7fac309f"}},
-  {"key":["Vitraux - Bénel", "1f3fe412f1042cbb6d42841123cf6c7e7fac309f"], "value":{"thumbnail":"http://steatite.hypertopic.org/thumbnail/1f3fe412f1042cbb6d42841123cf6c7e7fac309f"}},
+  {"key":["Vitraux - Bénel", "1f3fe412f1042cbb6d42841123cf6c7e7fac309f"], "value":{"resource":"https://steatite.utt.fr/picture/1f3fe412f1042cbb6d42841123cf6c7e7fac309f"}},
+  {"key":["Vitraux - Bénel", "1f3fe412f1042cbb6d42841123cf6c7e7fac309f"], "value":{"thumbnail":"https://steatite.utt.fr/thumbnail/1f3fe412f1042cbb6d42841123cf6c7e7fac309f"}},
   {"key":["Vitraux - Bénel", "1f3fe412f1042cbb6d42841123cf6c7e7fac309f"], "value":{"created":"2019-02-24"}},
   {"key":["Vitraux - Bénel", "1f3fe412f1042cbb6d42841123cf6c7e7fac309f"], "value":{"spatial":"48 deg 18' 26.88\" N, 4 deg 19' 18.32\" E"}}
 ]}
@@ -80,7 +80,7 @@ The response will be:
 URI: `/entity/{hash}`
 
 For example, if you request the following URI:
-<http://steatite.hypertopic.org/entity/1f3fe412f1042cbb6d42841123cf6c7e7fac309f>
+<https://steatite.utt.fr/entity/1f3fe412f1042cbb6d42841123cf6c7e7fac309f>
 
 The response will be:
 
@@ -88,8 +88,8 @@ The response will be:
 <entity>
   <attribute name="type" value="source"/>
   <attribute name="name" value="GRD 002"/>
-  <resource name="thumbnail" href="http://steatite.hypertopic.org/thumbnail/1f3fe412f1042cbb6d42841123cf6c7e7fac309f"/>
-  <resource name="source" href="http://steatite.hypertopic.org/picture/1f3fe412f1042cbb6d42841123cf6c7e7fac309f"/>
+  <resource name="thumbnail" href="https://steatite.utt.fr/thumbnail/1f3fe412f1042cbb6d42841123cf6c7e7fac309f"/>
+  <resource name="source" href="https://steatite.utt.fr/picture/1f3fe412f1042cbb6d42841123cf6c7e7fac309f"/>
 </entity>
 ```
 
@@ -98,7 +98,7 @@ The response will be:
 URI: `/corpus/{corpus}`
 
 For example, if you request the following URI:
-<http://steatite.hypertopic.org/corpus/Vitraux+-+Bénel>
+<https://steatite.utt.fr/corpus/Vitraux+-+Bénel>
 
 The response will be:
 
@@ -111,15 +111,15 @@ The response will be:
     "key":["Vitraux - Bénel", "e40b04e31b74f8ebb32a63525cc0efe7e7278193"],
     "value":{
       "name":"SNC",
-      "resource":"http://steatite.hypertopic.org/picture/e40b04e31b74f8ebb32a63525cc0efe7e7278193",
-      "thumbnail":"http://steatite.hypertopic.org/thumbnail/e40b04e31b74f8ebb32a63525cc0efe7e7278193"
+      "resource":"https://steatite.utt.fr/picture/e40b04e31b74f8ebb32a63525cc0efe7e7278193",
+      "thumbnail":"https://steatite.utt.fr/thumbnail/e40b04e31b74f8ebb32a63525cc0efe7e7278193"
     }
   }, {
     "key":["Vitraux - Bénel", "7b0006e98ec564021778cf585cae3adec07f4389"],
     "value":{
       "name":"SJ",
-      "resource":"http://steatite.hypertopic.org/picture/7b0006e98ec564021778cf585cae3adec07f4389",
-      "thumbnail":"http://steatite.hypertopic.org/thumbnail/7b0006e98ec564021778cf585cae3adec07f4389"
+      "resource":"https://steatite.utt.fr/picture/7b0006e98ec564021778cf585cae3adec07f4389",
+      "thumbnail":"https://steatite.utt.fr/thumbnail/7b0006e98ec564021778cf585cae3adec07f4389"
     }
   }
   ...
