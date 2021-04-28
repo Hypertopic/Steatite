@@ -3,6 +3,7 @@ service: steatite:80
 path: ''
 authenticationService: couchdb:5984
 logFormat: dev
+limit: 500mb
 session:
   proxy: true
   cookie:
