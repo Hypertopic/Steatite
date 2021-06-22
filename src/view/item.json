@@ -1,6 +1,7 @@
 {"rows":[
     {"key":["{{{corpus}}}", "{{item}}"], "value":{"name":"{{{name}}}"}},
-    {"key":["{{{corpus}}}", "{{item}}"], "value":{"resource":"{{service}}/picture/{{item}}"}},
+    {"key":["{{{corpus}}}", "{{item}}"], "value":{"original":"{{service}}/picture/{{item}}"}},
+    {"key":["{{{corpus}}}", "{{item}}"], "value":{"resource":"{{service}}/optimized/{{item}}"}},
     {"key":["{{{corpus}}}", "{{item}}"], "value":{"thumbnail":"{{service}}/thumbnail/{{item}}"}}
     {{#created}},
       {"key":["{{{corpus}}}", "{{item}}"], "value":{"created":"{{created}}"}}

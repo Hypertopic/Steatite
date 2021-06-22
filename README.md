@@ -30,6 +30,28 @@ API: `/picture/{hash}`
 
 Example: <https://steatite.utt.fr/picture/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
 
+### Get an optimized picture
+
+API: `/optimized/{hash}`
+
+Example: <https://steatite.utt.fr/optimized/c4ced98095164137e2df8ab7aa6e9e3740b12a96>
+
+![thumbnail-example](https://steatite.utt.fr/optimized/c4ced98095164137e2df8ab7aa6e9e3740b12a96)
+
+### Get an optimized picture of a fragment
+
+API: `/optimized/{hash}/{x1}+{y1}+{x2}+{y2}`
+
+You can display only a fragment of a picture by adding four coordinates, each separated with a  `+`  at the end of your request. The four digits `(\d+)` are coordinates - in pixels - that represents two points in the original image and create a rectangle that will be the displayed fragment.
+The two first digits are the coordinates of the first point, respectively the abscissa and ordinate. The third and fourth digits are respectively the abscissa and ordinate of the second point.
+
+For example if you want to display only the face of the character at the left of the picture, you can type this:
+<https://steatite.utt.fr/optimized/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000>
+
+And you will get this:
+
+![fragment-example](https://steatite.utt.fr/optimized/c4ced98095164137e2df8ab7aa6e9e3740b12a96/300+450+850+1000)
+
 ### Get a JPEG thumbnail (efficiently)
 
 API: `/thumbnail/{hash}`

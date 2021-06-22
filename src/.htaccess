@@ -5,6 +5,8 @@ RewriteEngine on
 RewriteRule ^thumbnail/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$ controller/thumbnail.php?id=$1&x1=$2&y1=$3&x2=$4&y2=$5
 RewriteRule ^thumbnail/(.+)$ controller/thumbnail.php?id=$1
 RewriteRule ^picture/(.+)$ controller/picture.php?id=$1
+RewriteRule ^optimized/(.+)/(\d+)\+(\d+)\+(\d+)\+(\d+)$ controller/optimized.php?id=$1&x1=$2&y1=$3&x2=$4&y2=$5
+RewriteRule ^optimized/(.+)$ controller/optimized.php?id=$1
 RewriteRule ^picture/$ controller/pictures.php
 RewriteRule ^$ controller/index.php
 
