@@ -9,8 +9,8 @@ RUN apt-get update && apt-get install -y \
   netpbm
 RUN a2enmod rewrite
 COPY src/ /var/www/html/
-RUN mkdir -p -m 755 thumbnail data
+RUN mkdir -p -m 755 thumbnail data optimized
 RUN sqlite3 data/attributes <schema.sql
-RUN chown -R www-data thumbnail data
+RUN chown -R www-data thumbnail data optimized
 
 VOLUME /var/www/html/data

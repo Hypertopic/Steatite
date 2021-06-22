@@ -19,7 +19,7 @@ http://www.gnu.org/licenses/agpl.html
 
 include('../lib/Mustache.php');
 
-preg_match('#/picture/(.+)$#', $_GET['resource'], $matches); 
+preg_match('#/optimized/(.+)$#', $_GET['resource'], $matches);
 $id = $matches[1];
 $db = new PDO('sqlite:../data/attributes');
 $query = $db->prepare(
