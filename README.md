@@ -1,17 +1,9 @@
-Steatite – Pictures archive for qualitative analysis
-====================================================
+## Functional features
 
-Contact: <aurelien.benel@utt.fr>
+The name of "Steatite" once was a French acronym for "*Serveur de traitement, d'émission et d'archivage de textes, images et épures*". Steatite is now an image processing service.
 
-Home page: <https://github.com/Hypertopic/Steatite>
+### Get the picture (in its original format)
 
+API: */picture/{hash}*
 
-## Requirements
-
-
-## Installation
-
-
-## Features
-
-
+> Example: https://steatite.utt.fr/picture/c4ced98095164137e2df8ab7aa6e9e3740b12a96
