@@ -19,7 +19,7 @@ In this project, we use 4 AWS components :
 
 To better understand the links between the different entities, here is a schema of what happens when one makes a request to have information used in this project :
 
-<img src="./images/schema_lambda.png" alt="isolated" width="auto"/>
+<img src="./resources/schema_lambda.png" alt="isolated" width="auto"/>
 
 ### Configuration
 
@@ -52,7 +52,7 @@ Create the lambda function:
 	* Make sure that you are going to create a new role for your function under "*Change default execution role*".
     * Click on "*Create function*"
 
-<img src="./images/put_item.png" alt="put item" width="auto"/>
+<img src="./resources/put_item.png" alt="put item" width="auto"/>
 
 Give the adequate role to your lambda function (in this case, we want our lambda function to be able to put an item in our database):
 * Go in your Lambda function.
@@ -60,18 +60,18 @@ Give the adequate role to your lambda function (in this case, we want our lambda
 * Click on "*Permissions*".
 * Click on your role. 
  
-<img src="./images/online_politic_put_item.png" alt="politic put item" width="auto"/>
+<img src="./resources/online_politic_put_item.png" alt="politic put item" width="auto"/>
 
 You can now see the roles that your function has.
 * Click on create an online politic
 * Indicate that it is for DynamoDB and for the action put item.
  
-<img src="./images/action_put_item.png" alt="action put item" width="auto"/>
+<img src="./resources/action_put_item.png" alt="action put item" width="auto"/>
 
 * Add an ARN to make sur that the function can only modify the database you’ve just created
 
  
-<img src="./images/arn_put_item.png" alt="arn put item" width="auto"/>
+<img src="./resources/arn_put_item.png" alt="arn put item" width="auto"/>
 
 * Click on examine the strategy
 * Name your strategy
@@ -216,7 +216,7 @@ Create the lambda function:
     * Click on "*Create function*"
 
  
-<img src="./images/get_item.png" alt="get item" width="auto"/>
+<img src="./resources/get_item.png" alt="get item" width="auto"/>
 
 Give the adequate role to your lambda function (in this case, we want our lambda function to be able to put an item in our database):
 * Go in your Lambda function.
@@ -224,7 +224,7 @@ Give the adequate role to your lambda function (in this case, we want our lambda
 * Click on "*Permissions*".
 * Click on your role. 
 
- <img src="./images/online_politic_put_item.png" alt="politic put item" width="auto"/>
+ <img src="./resources/online_politic_put_item.png" alt="politic put item" width="auto"/>
 
 You can now see the roles that your function has.
 * Click on create an online politic
@@ -378,7 +378,7 @@ Create the API:
 * Click on "*Build*" in the REST API block.
 * Make sure you configurate it well : 
 
-<img src="./images/deploy_api.png" alt="deploy api" width="auto"/>
+<img src="./resources/deploy_api.png" alt="deploy api" width="auto"/>
 
 * Name your API
 * Click on "*Create API*"
@@ -388,7 +388,7 @@ When the API is created, you can access its paramaters, if you want to create a 
 * Click on "*Actions*" > "*Create Resource*".
 * Give the resource a name :
 
-<img src="./images/give_ressource_api.png" alt="give ressource name api" width="auto"/>
+<img src="./resources/give_ressource_api.png" alt="give ressource name api" width="auto"/>
 
 * Click on "*Create Resource*".
 
@@ -402,7 +402,7 @@ When the API is created, you can access its paramaters, if you want to create a 
 
     * Give a name: {hash+}
 
-<img src="./images/give_ressource_api_proxy.png" alt="give ressource name api with proxy" width="auto"/>
+<img src="./resources/give_ressource_api_proxy.png" alt="give ressource name api with proxy" width="auto"/>
 
         > ⚠️️️ *Do not forget to add the "+" at the end of the resource's name as it is showed in the exemple* ⚠️️️
  
@@ -410,7 +410,7 @@ When the API is created, you can access its paramaters, if you want to create a 
 
 We will finalise the configuration later. The tree should look like this:
 
-<img src="./images/tree_conf.png" alt="tree configuration" width="auto"/>
+<img src="./resources/tree_conf.png" alt="tree configuration" width="auto"/>
 
 #### **DynamoDB configuration**
 
