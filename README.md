@@ -6,7 +6,7 @@ The name of "Steatite" once was a French acronym for "*Serveur de traitement, d'
 
 API: */item/{corpus}/{hash}*
 
-> Example: https://taqz1u2kf4.execute-api.eu-west-3.amazonaws.com/testPE22/item/Misc/93c50bd082f83683c9de8904f7102b3de2823b9f
+> Example: https://rzi0pem2eh.execute-api.eu-west-3.amazonaws.com/PE22-230522/item/Misc/c16b37e4788494ac224c63cfd8da55eecf0b74d5
 
 The response will be:
 
@@ -16,46 +16,15 @@ The response will be:
     {
       "key": [
         "Misc",
-        "93c50bd082f83683c9de8904f7102b3de2823b9f"
+        "c16b37e4788494ac224c63cfd8da55eecf0b74d5"
       ],
       "value": {
-        "created": "2022-05-13"
-      }
-    },
-    {
-      "key": [
-        "Misc",
-        "93c50bd082f83683c9de8904f7102b3de2823b9f"
-      ],
-      "value": {
-        "hash": "93c50bd082f83683c9de8904f7102b3de2823b9f"
-      }
-    },
-    {
-      "key": [
-        "Misc",
-        "93c50bd082f83683c9de8904f7102b3de2823b9f"
-      ],
-      "value": {
-        "name": "testMettreDansMisc.JPG"
-      }
-    },
-    {
-      "key": [
-        "Misc",
-        "93c50bd082f83683c9de8904f7102b3de2823b9f"
-      ],
-      "value": {
-        "corpus": "Misc"
-      }
-    },
-    {
-      "key": [
-        "Misc",
-        "93c50bd082f83683c9de8904f7102b3de2823b9f"
-      ],
-      "value": {
-        "resource": "https://pe22-test.s3.eu-west-3.amazonaws.com/Misc/testMettreDansMisc.JPG"
+        "hash": "c16b37e4788494ac224c63cfd8da55eecf0b74d5",
+        "created": "2022-05-29",
+        "thumbnail": "https://pe22-test.s3.eu-west-3.amazonaws.com/Thumbnail/Bleu_Orange_Insta.png",
+        "name": "Bleu_Orange_Insta.png",
+        "corpus": "Misc",
+        "resource": "https://pe22-test.s3.eu-west-3.amazonaws.com/Misc/Bleu_Orange_Insta.png"
       }
     }
   ]
