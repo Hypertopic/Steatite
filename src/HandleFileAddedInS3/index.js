@@ -20,7 +20,6 @@ const S3 = new AWS.S3();
 const tableName = "picture"
 
 exports.handler = (event) => {
-    console.log("event : ",event)
     // Gets the info from the triggered event (= put in S3 bucket) : bucket name and file name
 
     const s3_object = event['Records'][0].s3
@@ -48,7 +47,7 @@ exports.handler = (event) => {
 
     const corpus = parsedPathInfos.dir ? parsedPathInfos.dir : "Misc/" 
     console.log("corpus : ",corpus)
-    if (corpus === "Thumbnail") 
+    if (corpus === "Thumbnail" || corpus === "Optimized") 
       return 
 
     const keyObject = corpus + "/" + fileName
@@ -58,11 +57,86 @@ exports.handler = (event) => {
         Key: keyObject
     }
     
-    S3.getObject(paramsGetObject, function(err, data) {
+    S3.getObject(paramsGetObject, async function(err, data) {
         if (err) {
             console.log("[ERROR : getObject] :", err, err.stack); // an error occurred
         }
         else {
+
+            // Download the image from the S3 source bucket.
+
+            try {
+                const params = {
+                    Bucket: source_bucket_name,
+                    Key: keyObject
+                };
+                var origimage = await S3.getObject(params).promise();
+
+            } catch (error) {
+                console.log("Error getObject] : ",error);
+                return;
+            }
+
+            // set thumbnail width. Resize will set the height automatically to maintain aspect ratio.
+            const width  = 200;
+
+            // Use the sharp module to resize the image and save in a buffer.
+            try {
+                var buffer = await sharp(origimage.Body).resize(width).toBuffer();
+
+            } catch (error) {
+                console.log("Error sharp resize] : ",error);
+                return;
+            }
+
+            // Upload the thumbnail image to the destination bucket
+            try {
+                const destparams = {
+                    Bucket: source_bucket_name,
+                    Key: "Thumbnail/" + fileName,
+                    Body: buffer,
+                    ContentType: "image/jpeg"
+                };
+
+                const putResult = await S3.putObject(destparams).promise();
+
+            } catch (error) {
+                console.log("Error putObject thumbnail] : ",error);
+                return;
+            }
+
+            console.log('Successfully resized ' + source_bucket_name + ' Thumbnail/' + fileName +
+                ' and uploaded to ' + source_bucket_name + ' Thumbnail/' + fileName);
+            
+            // Use the sharp module to resize the image and save in a buffer.
+            try {
+                var optimized = await sharp(origimage.Body)
+                                .toFormat("jpeg", { mozjpeg: true })
+                                .toBuffer()
+            } catch (error) {
+                console.log("Error sharp optimized] : ",error);
+                return;
+            }
+
+            // Upload the thumbnail image to the destination bucket
+            try {
+                const destParamsOptimizedImage = {
+                    Bucket: source_bucket_name,
+                    Key: "Optimized/" + parsedPathInfos.name + ".jpeg",
+                    Body: optimized,
+                    ContentType: "image"
+                };
+
+                const putResultOptimizedImage = await S3.putObject(destParamsOptimizedImage).promise();
+
+            } catch (error) {
+                console.log("Error putObject optimized] : ",error);
+                return;
+            }
+
+            console.log('Successfully optimzed ' + source_bucket_name + ' Optimized/' + fileName +
+                ' and uploaded to ' + source_bucket_name + ' Optimized/' + fileName);
+
             const file_content = data['Body'] // Extract the content of the file
 
             // Set the creation date
@@ -74,7 +148,8 @@ exports.handler = (event) => {
 
             const baseUrlAWS = 'https://pe22-test.s3.eu-west-3.amazonaws.com/' 
             const resource = baseUrlAWS + keyObject
-            const thumbnail = baseUrlAWS + "Thumbnail/" + fileName
+            const thumbnailFileName = baseUrlAWS + "Thumbnail/" + fileName
+            const optimizedFileName = baseUrlAWS + "Optimized/" + parsedPathInfos.name + ".jpeg"
             // Create the object with all the params
             const paramsPutItem = {
                 Item: {
@@ -94,13 +169,14 @@ exports.handler = (event) => {
                         S: corpus
                     },
                     thumbnail: {
-                        S: thumbnail
+                        S: thumbnailFileName
+                    },
+                    optimized: {
+                        S: optimizedFileName
                     }
                 },
                 TableName: tableName
             }
-            console.log(paramsPutItem)
-            
             // Put the new item in DynamoDB
             DynamoDB.putItem(paramsPutItem, async function(err) {
                 if (err) {
@@ -108,52 +184,6 @@ exports.handler = (event) => {
                 }
                 else {
                     console.log("[SUCCESS] : item successfully added to the table ",tableName, " at the uri : ", resource)
-                
-                    // Download the image from the S3 source bucket.
-
-                    try {
-                        const params = {
-                            Bucket: source_bucket_name,
-                            Key: keyObject
-                        };
-                        var origimage = await S3.getObject(params).promise();
-
-                    } catch (error) {
-                        console.log(error);
-                        return;
-                    }
-
-                    // set thumbnail width. Resize will set the height automatically to maintain aspect ratio.
-                    const width  = 200;
-
-                    // Use the sharp module to resize the image and save in a buffer.
-                    try {
-                        var buffer = await sharp(origimage.Body).resize(width).toBuffer();
-
-                    } catch (error) {
-                        console.log(error);
-                        return;
-                    }
-
-                    // Upload the thumbnail image to the destination bucket
-                    try {
-                        const destparams = {
-                            Bucket: source_bucket_name,
-                            Key: "Thumbnail/" + fileName,
-                            Body: buffer,
-                            ContentType: "image"
-                        };
-
-                        const putResult = await S3.putObject(destparams).promise();
-
-                    } catch (error) {
-                        console.log(error);
-                        return;
-                    }
-
-                    console.log('Successfully resized ' + source_bucket_name + 'Thumbnail/' + fileName +
-                        ' and uploaded to ' + source_bucket_name + 'Thumbnail/' + fileName);
-                    
                 }
             })
         }
