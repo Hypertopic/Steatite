@@ -95,7 +95,8 @@ exports.handler = (event) => {
                     Bucket: source_bucket_name,
                     Key: "Thumbnail/" + fileName,
                     Body: buffer,
-                    ContentType: "image/jpeg"
+                    ContentType: "image",
+                    StorageClass: "REDUCED_REDUNDANCY"
                 };
 
                 const putResult = await S3.putObject(destparams).promise();
@@ -124,7 +125,8 @@ exports.handler = (event) => {
                     Bucket: source_bucket_name,
                     Key: "Optimized/" + parsedPathInfos.name + ".jpeg",
                     Body: optimized,
-                    ContentType: "image"
+                    ContentType: "image/jpeg",
+                    StorageClass: "REDUCED_REDUNDANCY"
                 };
 
                 const putResultOptimizedImage = await S3.putObject(destParamsOptimizedImage).promise();
