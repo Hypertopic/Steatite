@@ -9,3 +9,7 @@ build
 # misc
 .DS_Store
 
+.vscode
+*.zip
+src/HandleFileAddedInS3/handleFileAddedInS3.zip
+src/getAttributes/getAttributes.zip
