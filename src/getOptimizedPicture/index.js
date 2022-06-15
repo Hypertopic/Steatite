@@ -28,86 +28,73 @@ exports.handler = async (event) => {
       },
     },
   };
+
+  const paramsGetObjectInOptimized = {
+    Bucket: sourceBucketName,
+    Key: keyOptimizedImage,
+  };
+
   try {
-    const dynamoDBItem = await DynamoDB.getItem(paramsGetItem).promise();
 
-    let optimizedImage = dynamoDBItem["Item"]["optimized"]["S"];
-    let optimizedImageName = dynamoDBItem["Item"]["name"]["S"];
-    let optimizedImageCorpus = dynamoDBItem["Item"]["corpus"]["S"];
-    let optimizedBaseUrlAWS = dynamoDBItem["Item"]["baseUrlAWS"]["S"];
+    const optimizedImage = await S3.getObject(
+      paramsGetObjectInOptimized
+    ).promise();
 
-    if (optimizedImage.length <= 0) {
-      const paramsGetObjectInCorpus = {
-        Bucket: sourceBucketName,
-        Key: optimizedImageCorpus + "/" + optimizedImageName,
-      };
+    let image = Buffer.from(optimizedImage.Body, "binary");
 
-      // Get object in corpus folder
-      const miscImage = await S3.getObject(paramsGetObjectInCorpus).promise();
-
-      // Optimize the image
-      var sharpedImage = await sharp(miscImage.Body)
-        .toFormat("jpeg", { mozjpeg: true })
-        .toBuffer();
-
-      const destparams = {
-        Bucket: sourceBucketName,
-        Key: keyOptimizedImage,
-        Body: sharpedImage,
-        ContentType: "image/jpeg",
-        StorageClass: "REDUCED_REDUNDANCY",
-      };
-
-      // Add object in the Optimized folder
-      await S3.putObject(destparams).promise();
-
-      // Setting up the parameters in order to update the DynamoDB line
-      const paramsUpdateItems = {
-        ExpressionAttributeNames: {
-          "#OPT": "optimized",
-        },
-        ExpressionAttributeValues: {
-          ":opt": {
-            S: optimizedBaseUrlAWS + keyOptimizedImage,
-          },
-        },
-        Key: {
-          hash: {
-            S: imageHash,
-          },
-        },
-        ReturnValues: "ALL_NEW",
-        TableName: tableName,
-        UpdateExpression: "SET #OPT = :opt",
-      };
-
-      await DynamoDB.updateItem(paramsUpdateItems).promise();
-
-      response.body = sharpedImage.toString("base64")
-
-    } else {
-      const paramsGetObjectInOptimized = {
-        Bucket: sourceBucketName,
-        Key: keyOptimizedImage,
-      };
-
-      const optimizedImage = await S3.getObject(
-        paramsGetObjectInOptimized
-      ).promise();
-
-      let image = Buffer.from(optimizedImage.Body, "binary");
-
-      response.body = image.toString("base64")
-    }
+    response.body = image.toString("base64")
   } catch (err) {
-    console.log(err);
+    if (err.code === "NoSuchKey") 
+    {
 
-    response = {
-      statusCode: 400,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rows: err }, null, 2),
-    };
-  }
+      const dynamoDBItem = await DynamoDB.getItem(paramsGetItem).promise();
+
+      if (Object.keys(dynamoDBItem).length > 0) { // The object isn't generated in the Optimized folder.
+        
+        let optimizedImageName = dynamoDBItem["Item"]["name"]["S"];
+        let optimizedImageCorpus = dynamoDBItem["Item"]["corpus"]["S"];
+
+        const paramsGetObjectInCorpus = {
+          Bucket: sourceBucketName,
+          Key: optimizedImageCorpus + "/" + optimizedImageName,
+        };
+  
+        // Get object in corpus folder
+        const miscImage = await S3.getObject(paramsGetObjectInCorpus).promise();
+  
+        // Optimize the image
+        var sharpedImage = await sharp(miscImage.Body)
+          .toFormat("jpeg", { mozjpeg: true, quality: 75 })
+          .toBuffer();
+        
+        const destparams = {
+          Bucket: sourceBucketName,
+          Key: keyOptimizedImage,
+          Body: sharpedImage,
+          ContentType: "image/jpeg",
+          StorageClass: "REDUCED_REDUNDANCY",
+        };
+  
+        // Add object in the Optimized folder
+        await S3.putObject(destparams).promise();
+
+        response.body = sharpedImage.toString("base64")
+
+      } else {
+        response = {
+          statusCode: 400,
+          headers: { "Content-Type": "application/json" },
+          body: "The item with the hash " + imageHash + " doesn't exist in DynamoDB. Hash must be wrong.",
+        };
+      }
+    } else {
+      response = {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rows: err }, null, 2),
+      };
+    }
+  } 
 
   return response;
 };
