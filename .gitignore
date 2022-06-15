@@ -13,3 +13,4 @@ build
 *.zip
 src/HandleFileAddedInS3/handleFileAddedInS3.zip
 src/getAttributes/getAttributes.zip
+.vscode/launch.json

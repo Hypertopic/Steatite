@@ -1,14 +1,1 @@
-{ 
-  "name": "handlefileaddedins3",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "sharp": "^0.30.5"
-  }
-}
+{"name":"handlefileaddedins3","version":"1.0.0","description":"","main":"index.js","scripts":{"test":"echo \"Error: no test specified\" && exit 1"},"author":"","license":"ISC","dependencies":{"exif":"^0.6.0","sharp":"^0.30.5"}}

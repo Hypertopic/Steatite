@@ -11,6 +11,7 @@ const AWS = require("aws-sdk");
 const sharp = require("sharp");
 const path = require("path");
 const crypto = require("crypto");
+const ExifImage = require("exif").ExifImage;
 
 const DynamoDB = new AWS.DynamoDB();
 const S3 = new AWS.S3();
@@ -30,7 +31,7 @@ const allowedExtensionsForSharp = [
   "svg",
 ];
 
-exports.handler = (event) => {
+exports.handler = (event, context) => {
   // Gets the info from the triggered event (= put in S3 bucket) : bucket name and file name
   const s3Object = event["Records"][0].s3;
   const sourceBucketName = s3Object.bucket.name;
@@ -71,17 +72,28 @@ exports.handler = (event) => {
     } else {
       const fileContent = data["Body"]; // Extract the content of the file
 
+      let DateTimeOriginal;
+
+      new ExifImage({ image: fileContent }, function (error, exifData) {
+        if (error) console.log("Error: " + error.message);
+        else {
+          var str = exifData.exif.DateTimeOriginal.split(" ");
+          //get date part and replace ':' with '-'
+          DateTimeOriginal = str[0].replace(/:/g, "-");
+        }
+      });
+
       // create the final etag encrypted
       let finalEtag = crypto.createHash("sha1");
       let hash = finalEtag.update(fileContent).digest("hex");
       const etagWithoutQuoteAndExtension = hash + ".jpeg";
       // set thumbnail width. Resize will set the height automatically to maintain aspect ratio.
-      const width = 200;
+      const height = 100;
 
       // Use the sharp module to resize the image and save in a buffer.
       try {
         var buffer = await sharp(fileContent)
-          .resize(width)
+          .resize(height)
           .toFormat("jpeg", { mozjpeg: true })
           .toBuffer();
       } catch (error) {
@@ -103,37 +115,23 @@ exports.handler = (event) => {
         console.log("Error putObject thumbnail] : ", error);
         return;
       }
-      // Set the creation date
-      var creationDate = new Date().toISOString().slice(0, 10);
-
       const baseUrlAWS =
         "https://" + sourceBucketName + ".s3.eu-west-3.amazonaws.com/";
       const resource = baseUrlAWS + keyObject;
-      const thumbnailFileName =
-        baseUrlAWS + "Thumbnail/" + etagWithoutQuoteAndExtension;
       // Create the object with all the params
       const paramsPutItem = {
         Item: {
           hash: {
             S: hash,
           },
-          resource: {
-            S: resource,
-          },
           name: {
             S: fileName,
           },
           created: {
-            S: creationDate,
+            S: DateTimeOriginal,
           },
           corpus: {
             S: corpus,
-          },
-          thumbnail: {
-            S: thumbnailFileName,
-          },
-          optimized: {
-            S: "",
           },
           baseUrlAWS: {
             S: baseUrlAWS,
