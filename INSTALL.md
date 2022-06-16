@@ -29,17 +29,98 @@ We are going to start by configurating all the aws elements of the project and f
 
 #### **S3 Configuration**
 
-For this project, we only need to create a S3 bucket. To do so: 
+For this project, we need to do multiple steps for s3.
+1. Create an "S3" bucket.
+2. Change bucket policy and make the bucket private.
+3. Create the "Thumbnail" and "Optimized" default folder.
+
+##### **1. CREATE AN "S3" BUCKET**
+
 * Go to your AWS console (https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-3)
-* Click on create a bucket
+* Click on "Create bucket" : <p align="left">
+  <img width="149" alt="image" src="https://user-images.githubusercontent.com/45626870/174086669-53cfdada-8833-416b-9374-d6bb327d4351.png">
+</p>
+
 * Configurate your bucket: 
-    * Give a name.
+    * Give a name (*for exemple "steatitebucket"*).
     * Make sure the region is the one you want to use.
-	* Make sur all the accesses are blocked (we will modify them after).
- 	* Click on create a bucket.
+    	<p align="left">
+    		<img width="701" alt="image" src="https://user-images.githubusercontent.com/45626870/174091399-6c303023-92b7-42d9-84a4-1e9164ad58c4.png">
+     	</p>
+	* Uncheck the **Block Public Access settings for this bucket** in order to allow the modification of the **Bucket policy** after the creation of 	the bucket.
+	<p align="left">
+		<img width="878" alt="image" src="https://user-images.githubusercontent.com/45626870/174103221-ac5355a6-870e-4d82-a40e-4d100eb5020a.png">     	  </p>
+		
+	> Don't forget to check the fact that "*the current settings might result in this bucket and the objects within becoming public*"
+	<p align="left">
+		<img width="832" alt="image" src="https://user-images.githubusercontent.com/45626870/174104206-83d12974-bf44-47f8-a3af-4f7b78f21b15.png">
+     	</p>
+
+ 	* Click on "Create bucket" : <p align="left">
+			<img width="149" alt="image" src="https://user-images.githubusercontent.com/45626870/174086669-53cfdada-8833-416b-9374-d6bb327d4351.png">
+		</p>
 
 > Your bucket is ready!
 
+##### **2. CHANGE BUCKET POLICY AND MAKE THE BUCKET PRIVATE.**
+
+* In your bucket list, access your bucket by clicking on its name.
+* Go to the "Permissions" tab.
+ 	<p align="left">
+		<img width="727" alt="image" src="https://user-images.githubusercontent.com/45626870/174110891-5c72f91a-9fe8-48fb-ad72-72527276ad34.png">
+	</p>
+* Scroll down to the "Bucket policy" part and click on "Edit".
+* Copy this policy :
+
+	```
+	{
+	   "Version":"2012-10-17",
+	   "Statement":[
+	      {
+		 "Effect":"Allow",
+		 "Principal": "*",
+		 "Action":[
+		    "s3:PutObject",
+		    "s3:PutObjectAcl",
+		    "s3:GetObject",
+		    "s3:GetObjectAcl",
+		    "s3:DeleteObject"
+		 ],
+		 "Resource":"arn:aws:s3:::steatitebucket/*"
+	      }
+	   ]
+	}
+	```
+	> Change the "Resource" with your bucket name if it's not the same as the exemple.
+* Click on "Save changes" :
+	<p align="left">
+		<img width="146" alt="image" src="https://user-images.githubusercontent.com/45626870/174112464-ef886fc8-0560-4a98-89dd-c91ebb8b7bac.png">
+	</p>
+* Scroll down to the "Block public access (bucket settings)" part and click on "Edit".
+* Check the "Block all public access" in order to protect your bucket.
+	<p align="left">
+		<img width="878" alt="image" src="https://user-images.githubusercontent.com/45626870/174114419-faef53fe-0219-48b7-83d7-628436978d95.png">
+	</p>
+* Click on "Save changes" :
+	<p align="left">
+		<img width="146" alt="image" src="https://user-images.githubusercontent.com/45626870/174112464-ef886fc8-0560-4a98-89dd-c91ebb8b7bac.png">
+	</p>
+* Confirm the modification.
+
+> Your bucket is not fully ready and configured !
+
+##### **3. CREATE THE "THUMBNAIL" AND "OPTIMIZED" DEFAULT FOLDER.**
+
+* Click on "Create folder".
+* Name it "_Thumbnail_".
+* Click on "Create folder" to validate the creation. 
+* Make the same with the "_Optimized_" folder.
+* Here is how your bucket should looks like now :
+	<p align="left">
+		<img width="1260" alt="image" src="https://user-images.githubusercontent.com/45626870/174117222-6303c479-4f13-4b5e-9dc0-83e54fefe540.png">
+	</p>
+	
+---
 #### **Lambda configuration**
 ##### *1. Put an item*
 Create the lambda function:
