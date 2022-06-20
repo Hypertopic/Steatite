@@ -41,11 +41,7 @@ For this project, we need to do multiple steps for s3.
 ##### **1. CREATE AN "S3" BUCKET**
 
 * Go to your AWS console (https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-3)
-* Click on "**Create bucket**" : 
-    <p align="left">
-        <img width="149" alt="image" src="https://user-images.githubusercontent.com/45626870/174086669-53cfdada-8833-416b-9374-d6bb327d4351.png">
-    </p>
-
+* Click on "**Create bucket**".
 * Configurate your bucket: 
     * Give a name (*for exemple "steatitebucket"*).
     * Make sure the region is the one you want to use.
@@ -61,14 +57,10 @@ For this project, we need to do multiple steps for s3.
 	> Don't forget to check the fact that "*the current settings might result in this bucket and the objects within becoming public*"
 	
     <p align="left">
-		    <img width="832" alt="image" src="https://user-images.githubusercontent.com/45626870/174104206-83d12974-bf44-47f8-a3af-4f7b78f21b15.png">
+	  <img width="832" alt="image" src="https://user-images.githubusercontent.com/45626870/174104206-83d12974-bf44-47f8-a3af-4f7b78f21b15.png">
     </p>
     
- 	* Click on "**Create bucket**" : 
-
-        <p align="left">
-			<img width="149" alt="image" src="https://user-images.githubusercontent.com/45626870/174086669-53cfdada-8833-416b-9374-d6bb327d4351.png">
-		</p>
+ 	* Click on "**Create bucket**".
 
 > Your bucket is ready!
 ---
@@ -103,19 +95,13 @@ For this project, we need to do multiple steps for s3.
 	}
 	```
 	> Change the "**Resource**" with your bucket name if it's not the same as the exemple.
-* Click on "**Save changes**" :
-	<p align="left">
-		<img width="146" alt="image" src="https://user-images.githubusercontent.com/45626870/174112464-ef886fc8-0560-4a98-89dd-c91ebb8b7bac.png">
-	</p>
+* Click on "**Save changes**".
 * Scroll down to the "**Block public access (bucket settings)**" part and click on "**Edit**".
 * Check the "**Block all public access**" in order to protect your bucket.
 	<p align="left">
 		<img width="878" alt="image" src="https://user-images.githubusercontent.com/45626870/174114419-faef53fe-0219-48b7-83d7-628436978d95.png">
 	</p>
-* Click on "**Save changes**" :
-	<p align="left">
-		<img width="146" alt="image" src="https://user-images.githubusercontent.com/45626870/174112464-ef886fc8-0560-4a98-89dd-c91ebb8b7bac.png">
-	</p>
+* Click on "**Save changes**".
 * Confirm the modification.
 
 > Your bucket is not fully ready and configured !
@@ -124,6 +110,7 @@ For this project, we need to do multiple steps for s3.
 
 ##### **3. CREATE THE "THUMBNAIL" AND "OPTIMIZED" DEFAULT FOLDER.**
 
+* Go to the "**Objects**" tab.
 * Click on "**Create folder**".
 * Name it "**_Thumbnail_**".
 * Click on "**Create folder**" to validate the creation. 
@@ -149,22 +136,14 @@ They will be explained later in each of there parts.
 
 In order to add a lambda function, here is the steps to follow :
 * Go to the [Lambda functions page](https://eu-west-3.console.aws.amazon.com/lambda/home?region=eu-west-3#/functions).
-* Click on "**Create function**" :
-
-    <p align="left">
-        <img width="147" alt="image" src="https://user-images.githubusercontent.com/45626870/174259214-d15a49d3-015b-45d7-9c9e-0f005a12a695.png">
-    </p>
+* Click on "**Create function**".
 * Select "**Author from scratch**".
 * Give the good name to the function, one of the name listed above.
 * Choose "**Node.js 14.x**" as the runtime environment.
 * In the "**Permissions**" tab, you will have a basic permission role for the function that will be created in your [IAM environment](https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/roles). Its name will be like "*functionname-role-randomstring"*.
     
     * The IAM permissions for a specific function are different, some need full access to DynamoDB, others to S3. This specification will be explained later in there function explanation. 
-* Click on "**Create function**" :
-
-    <p align="left">
-        <img width="147" alt="image" src="https://user-images.githubusercontent.com/45626870/174259214-d15a49d3-015b-45d7-9c9e-0f005a12a695.png">
-    </p>
+* Click on "**Create function**".
 * You now have a brand new function, here is how you add the existing code :
     
     * On Github, go to the src/ folder, where all the functions are.
@@ -193,12 +172,16 @@ Do the same thing for all the functions and then we will configure the IAM permi
 
 We are going to add environment variables in some of our functions in order to make our code dynamic and avoid useless code modification.
 
+You will be asked to add the name of your future DynamoDB. It could be whatever you want but you must use the same name between your environment variables and your DynamoDB table's name.
+
 For each of the next functions :
 1. Go to the function in Lambda.
 2. Go to the "**Configuration**" tab.
-3. Click on "**Edit**" on "**Environment variables**".
-4. Add the attributes.
-5. Click on "**Save**".
+3. Go to "**Environment variables**" on the left menu.
+4. Click on "**Edit**" on "**Environment variables**".
+5. Click on "**Add environment variable**".
+6. Add the attributes.
+7. Click on "**Save**".
 
 **HandleFileAddedInS3**
 
@@ -227,6 +210,40 @@ Value : The name of your DynamoDB table.]
 Value : The name of your S3 bucket.]
 
 ---
+
+##### ***Changing memory and timeout of our functions***
+
+We need to modify the memory allocated to some of our function and also the default timeout in order to let our functions do there job.
+
+In order to modify the configuration of a function, you need to follow these steps :
+
+1. Go to your function.
+2. Go to the "**Configuration**" tab.
+3. Select "**General configuration**" on the left menu.
+4. Click on "**Edit**".
+5. Make your modifications and click on "**Save**".
+
+**HandleFileAddedInS3**
+
+* Memory : 512MB.
+* Timeout : 1 minute.
+
+**getAttributes**
+
+* Memory : 128MB.
+* Timeout : 40 secondes.
+
+**getOptimizedPicture**
+
+* Memory : 1536MB.
+* Timeout : 10 secondes.
+
+**getThumbnailOfImage**
+
+* Memory : 128MB.
+* Timeout : 1 minute.
+
+---
 ##### ***IAM PERMISSIONS***
 
 In order to access to your IAM role for a specific function :
@@ -253,7 +270,7 @@ If you want to add a permission to a role :
 * Select "**Attach policies**".
 * You can filter by the name you want and select multiples policies.
 * Once you are finished with your selection, click on the lower right button "**Attach policies**".
-* Your policies are not attached to your role.
+* Your policies are now attached to your role.
 
 **HandleFileAddedInS3**
 
@@ -286,7 +303,7 @@ In this part, we are going to create and configure the table that will store dat
 
 1. Go on "**Tables**" tab at this [link](https://eu-west-3.console.aws.amazon.com/dynamodbv2/home?region=eu-west-3#tables).
 2. Click on "**Create table**".
-3. Enter whatever you want as the table name.
+3. Enter whatever you want as the table name (the same as the environment variable you add before).
 4. Enter "**hash**" as the partition key, let the default type which is *String*.
 5. Let the default settings and click on "**Create table**".
 6. Your table will be available when the status attribute goes to "**Active**", it could take few seconds.
@@ -409,13 +426,13 @@ We are no going to configure each of API calls.
 2. In the Lambda Function input, write "**getAttributes**" and select it.
 3. Click on "**Ok**" in order to add the correct permissions to the Lambda function.
 
-**+/optimized/{hash+}**
+**/optimized/{hash+}**
 
 1. Click on "**ANY**".
 2. In the Lambda Function input, write "**getOptimizedPicture**" and select it.
 3. Click on "**Ok**" in order to add the correct permissions to the Lambda function.
 
-**+/thumbnail/{hash+}**
+**/thumbnail/{hash+}**
 
 1. Click on "**ANY**".
 2. In the Lambda Function input, write "**getThumbnailOfImage**" and select it.
@@ -429,7 +446,7 @@ We are no going to configure each of API calls.
 4. In "**Stage name**", you can put whatever you want, "**Steatite**" seems fine. 
 5. Click on "**Deploy**".
 
-> The API should be deployed now, here is the view :
+> The API should be deployed now, here is the view after clicking on its name :
 
 <p align="left">
     <img width="260" alt="image" src="https://user-images.githubusercontent.com/45626870/174448282-583a9da9-1cf9-4dd6-86fa-31f46f649d38.png">
@@ -446,7 +463,8 @@ We need to add the type of binary files accepted by the API in order to allow ou
     <p align="left">
       <img width="225" alt="image" src="https://user-images.githubusercontent.com/45626870/174592353-1465cd40-e1c8-4219-be69-b2dd92e029c8.png">
     </p>
-4. Go to "**Resources**" and deploy your API.
+4. Click on "**Save changes**".
+5. Go to "**Resources**" and deploy your API. You can select the same stage you added before.
 
 > We now want to add an image to the S3 bucket (into a folder which will take the name of the corpus).
 
@@ -521,6 +539,8 @@ The image should be here, in your brand new folder. Now we want to verify if the
 For this part you can use the JSON response you had before and copy paste the "**optimized**" attribute value.
 
 You should receive the optimized version of your image.
+
+> First call is the one that create the image in the Optimized folder into your S3 bucket. The response could take few seconds.
 
 **/thumbnail/{hash+}**
 
