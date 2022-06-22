@@ -5,9 +5,6 @@ AWS Account with access to :
 * [Lambda](https://aws.amazon.com/fr/lambda/)
 * [API Gateway](https://aws.amazon.com/fr/api-gateway/)
 * [DynamoDB](https://aws.amazon.com/fr/dynamodb/)
-
-
-
 ## Installation procedure
 
 ### Brief presentation of the AWS components
@@ -19,407 +16,529 @@ In this project, we use 4 AWS components :
 
 To better understand the links between the different entities, here is a schema of what happens when one makes a request to have information used in this project :
 
-<img src="./resources/schema_lambda.png" alt="isolated" width="auto"/>
+<img alt="image" src="https://user-images.githubusercontent.com/45626870/175066954-fb071d8a-6b09-409a-b39e-13821c249ccd.png">
 
+---
 ### Configuration
 
 > For all the configurations, we recommend using the AWS region closest to you (*in our case, eu-west-3 | Europe Paris*)
 
-We are going to start by configurating all the aws elements of the project and finish with the lambda. Every lambda function represents a functional feature that we want to implement.
+---
+#### ***S3 Configuration***
 
-#### **S3 Configuration**
+For this project, we need to do multiple steps for s3.
+1. Create an "**S3**" bucket.
 
-For this project, we only need to create a S3 bucket. To do so: 
+2. Change bucket policy and make the bucket private.
+
+3. Create the "**Thumbnail**" and "**Optimized**" default folder.
+---
+##### **1. CREATE AN "S3" BUCKET**
+
 * Go to your AWS console (https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-3)
-* Click on create a bucket
+* Click on "**Create bucket**".
 * Configurate your bucket: 
-    * Give a name.
+    * Give a name (*for exemple "steatitebucket"*).
     * Make sure the region is the one you want to use.
-	* Make sur all the accesses are blocked (we will modify them after).
- 	* Click on create a bucket.
+    	<p align="left">
+    		<img width="701" alt="image" src="https://user-images.githubusercontent.com/45626870/174091399-6c303023-92b7-42d9-84a4-1e9164ad58c4.png">
+     	</p>
+	* Uncheck the **Block Public Access settings for this bucket** in order to allow the modification of the **Bucket policy** after the creation of the bucket.
+	
+        <p align="left">
+		    <img width="878" alt="image" src="https://user-images.githubusercontent.com/45626870/174103221-ac5355a6-870e-4d82-a40e-4d100eb5020a.png">     	  
+        </p>
+		
+	> Don't forget to check the fact that "*the current settings might result in this bucket and the objects within becoming public*"
+	
+    <p align="left">
+	  <img width="832" alt="image" src="https://user-images.githubusercontent.com/45626870/174104206-83d12974-bf44-47f8-a3af-4f7b78f21b15.png">
+    </p>
+    
+ 	* Click on "**Create bucket**".
 
 > Your bucket is ready!
+---
+##### **2. CHANGE BUCKET POLICY AND MAKE THE BUCKET PRIVATE.**
 
-#### **Lambda configuration**
-##### *1. Put an item*
-Create the lambda function:
-* Go to the AWS console: https://eu-west-3.console.aws.amazon.com/lambda/home?region=eu-west-3#/functions
-* Click on "*Create function*"
-* Configure the function: 
-    * Click on "*Author from scratch*" to create it from scratch.
-    * Name your function.
-	* You want your code to be in node.js, you can choose the "*Node.js 14.x*" version, the one we chose.
-	* Make sure that you are going to create a new role for your function under "*Change default execution role*".
-    * Click on "*Create function*"
+* In your bucket list, access your bucket by clicking on its name.
+* Go to the "**Permissions**" tab.
+ 	<p align="left">
+		<img width="727" alt="image" src="https://user-images.githubusercontent.com/45626870/174110891-5c72f91a-9fe8-48fb-ad72-72527276ad34.png">
+	</p>
 
-<img src="./resources/put_item.png" alt="put item" width="auto"/>
+* Scroll down to the "**Bucket policy**" part and click on "**Edit**".
+* Copy this policy :
 
-Give the adequate role to your lambda function (in this case, we want our lambda function to be able to put an item in our database):
-* Go in your Lambda function.
-* Click on "*Configuration*".
-* Click on "*Permissions*".
-* Click on your role. 
- 
-<img src="./resources/online_politic_put_item.png" alt="politic put item" width="auto"/>
+	```
+	{
+	   "Version":"2012-10-17",
+	   "Statement":[
+	      {
+		 "Effect":"Allow",
+		 "Principal": "*",
+		 "Action":[
+		    "s3:PutObject",
+		    "s3:PutObjectAcl",
+		    "s3:GetObject",
+		    "s3:GetObjectAcl",
+		    "s3:DeleteObject"
+		 ],
+		 "Resource":"arn:aws:s3:::steatitebucket/*"
+	      }
+	   ]
+	}
+	```
+	> Change the "**Resource**" with your bucket name if it's not the same as the exemple.
+* Click on "**Save changes**".
+* Scroll down to the "**Block public access (bucket settings)**" part and click on "**Edit**".
+* Check the "**Block all public access**" in order to protect your bucket.
+	<p align="left">
+		<img width="878" alt="image" src="https://user-images.githubusercontent.com/45626870/174114419-faef53fe-0219-48b7-83d7-628436978d95.png">
+	</p>
+* Click on "**Save changes**".
+* Confirm the modification.
 
-You can now see the roles that your function has.
-* Click on create an online politic
-* Indicate that it is for DynamoDB and for the action put item.
- 
-<img src="./resources/action_put_item.png" alt="action put item" width="auto"/>
+> Your bucket is not fully ready and configured !
 
-* Add an ARN to make sur that the function can only modify the database you’ve just created
+---
 
- 
-<img src="./resources/arn_put_item.png" alt="arn put item" width="auto"/>
+##### **3. CREATE THE "THUMBNAIL" AND "OPTIMIZED" DEFAULT FOLDER.**
 
-* Click on examine the strategy
-* Name your strategy
-* Click on create the strategy
-* Do the same for access to S3 with the action GetObject
+* Go to the "**Objects**" tab.
+* Click on "**Create folder**".
+* Name it "**_Thumbnail_**".
+* Click on "**Create folder**" to validate the creation. 
+* Make the same with the "**_Optimized_**" folder.
+* Here is how your bucket should looks like now :
 
-In the code section, add this and modify the name of the database and the URI of the bucket: 
+	<p align="left">
+		<img width="1260" alt="image" src="https://user-images.githubusercontent.com/45626870/174117222-6303c479-4f13-4b5e-9dc0-83e54fefe540.png">
+	</p>
+	
+---
+#### ***Lambda configuration***
 
-```
-const AWS = require("aws-sdk")
-const S3 = new AWS.S3();
-// Connection to the table
-const DynamoDB = new AWS.DynamoDB();
-const tableName = "DYNAMODB_TABLE_NAME"
+All the lambda functions are already developed and available on the [Github Steatite's repository](https://github.com/Hypertopic/Steatite/tree/v7/src).
 
-let crypto = require('crypto')
-let finalEtag = crypto.createHash('sha1')
+We can list 4 different functions :
+* HandleFileAddedInS3
+* getAttributes
+* getOptimizedPicture
+* getThumbnailOfImage
 
-exports.handler = (event) => {
-    //gets the info from the triggered event (= put in S3 bucket) : bucket name and file name
+They will be explained later in each of there parts.
 
-    const s3_object = event['Records'][0]['s3']
-    const source_bucket_name = s3_object['bucket']['name']
-    const file_name = s3_object['object']['key']
+In order to add a lambda function, here is the steps to follow :
+* Go to the [Lambda functions page](https://eu-west-3.console.aws.amazon.com/lambda/home?region=eu-west-3#/functions).
+* Click on "**Create function**".
+* Select "**Author from scratch**".
+* Give the good name to the function, one of the name listed above.
+* Choose "**Node.js 14.x**" as the runtime environment.
+* In the "**Permissions**" tab, you will have a basic permission role for the function that will be created in your [IAM environment](https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/roles). Its name will be like "*functionname-role-randomstring"*.
+    
+    * The IAM permissions for a specific function are different, some need full access to DynamoDB, others to S3. This specification will be explained later in there function explanation. 
+* Click on "**Create function**".
+* You now have a brand new function, here is how you add the existing code :
+    
+    * On Github, go to the src/ folder, where all the functions are.
+    * Click on the function you would like to copy.
+    * Copy the URI of the function, for exemple *https://github.com/Hypertopic/Steatite/tree/v7/src/getAttributes*
+    * We are going to use an external website to easily create our zip folder. Go on [GitZip](http://kinolien.github.io/gitzip/).
+        
+        * Paste your URI in the bar on the top of the page.
+        * Click on "**Download**".
+        * Your zip is now downloaded.
+    * Go back to your function page, normally you are on the "Code" tab.
+    * Click on the upper right button called "**Upload from**"
+        <p align="left">
+            <img width="146" alt="image" src="https://user-images.githubusercontent.com/45626870/174265366-83be4a8b-85be-4348-b215-2de93c34db0d.png">
+        </p>
+    * Click on "**.zip file**".
+    * Click on "**Upload**".
+    * Go to your zip location and select it.
+    * Click on "**Save**".
 
-    const paramsGetObject = {
-        Bucket: source_bucket_name,
-        Key: file_name
-    }
+> The function is now uploaded into Lambda, some of our functions need modules to work, so they will not be visible in the "Code source" part under the "Code" tab because they are too large. 
 
-    S3.getObject(paramsGetObject, function(err, data) {
-        if (err) {
-            console.log("[ERROR : getObject] :", err, err.stack); // an error occurred
-        }
-        else {
-            // if the object is added,creates the new item
-            const file_content = data['Body']
-            console.log(data)
-            let etag = data['ETag'].replace(/"/gi, '')
-            
-            // create the final etag encrypted
-            finalEtag.update(etag)
-            etag = finalEtag.digest('hex')
-            
-            // set the creation date
-            var creationDate = new Date().toISOString().slice(0, 10);
+Do the same thing for all the functions and then we will configure the IAM permissions for each of them.
 
-            const resource = "BUCKET_URI/" + file_name
-            const paramsPutItem = {
-                Item: {
-                    hash: {
-                        S: etag 
-                    },
-                    resource: {
-                        S: resource
-                    },
-                    name: {
-                        S: file_name  
-                    },
-                    created: {
-                        S: creationDate
-                    }
-                },
-                TableName: tableName
-            }
-            //Put the new item in DynamoDB
-            DynamoDB.putItem(paramsPutItem, function(err, data) {
-                if (err) {
-                    console.log("[ERROR : putItem] :", err, err.stack); // an error occurred
-                }
-                else {
-                    console.log("[SUCCESS] : item successfully added to the table ",tableName, " at the uri : ", resource)
-                }
-            })
-        }
-    })
-}
-```
+##### ***Adding environment variables***
 
-* Click on "*Deploy*"
+We are going to add environment variables in some of our functions in order to make our code dynamic and avoid useless code modification.
 
-Then, we can test it :
-* Click on the arrow on the button "*Test*".
-* Click on "*Create new event*".
-* Name your event.
-* Chose the S3 model and change the data according to your information (region, bucket name, object). 
-  Here is an example of a test (before doing this test, you should add an element in your S3 bucket): 
+You will be asked to add the name of your future DynamoDB. It could be whatever you want but you must use the same name between your environment variables and your DynamoDB table's name.
 
-```
+For each of the next functions :
+1. Go to the function in Lambda.
+2. Go to the "**Configuration**" tab.
+3. Go to "**Environment variables**" on the left menu.
+4. Click on "**Edit**" on "**Environment variables**".
+5. Click on "**Add environment variable**".
+6. Add the attributes.
+7. Click on "**Save**".
+
+**HandleFileAddedInS3**
+
+* [Key name : DynamoDBTableName;
+Value : The name of your DynamoDB table.]
+
+**getAttributes**
+
+* [Key name : DynamoDBTableName;
+Value : The name of your DynamoDB table.]
+
+**getOptimizedPicture**
+
+* [Key name : DynamoDBTableName;
+Value : The name of your DynamoDB table.]
+
+* [Key name : S3BucketName;
+Value : The name of your S3 bucket.]
+
+**getThumbnailOfImage**
+
+* [Key name : DynamoDBTableName;
+Value : The name of your DynamoDB table.]
+
+* [Key name : S3BucketName;
+Value : The name of your S3 bucket.]
+
+---
+
+##### ***Changing memory and timeout of our functions***
+
+We need to modify the memory allocated to some of our function and also the default timeout in order to let our functions do there job.
+
+In order to modify the configuration of a function, you need to follow these steps :
+
+1. Go to your function.
+2. Go to the "**Configuration**" tab.
+3. Select "**General configuration**" on the left menu.
+4. Click on "**Edit**".
+5. Make your modifications and click on "**Save**".
+
+**HandleFileAddedInS3**
+
+* Memory : 512MB.
+* Timeout : 1 minute.
+
+**getAttributes**
+
+* Memory : 128MB.
+* Timeout : 40 secondes.
+
+**getOptimizedPicture**
+
+* Memory : 1536MB.
+* Timeout : 10 secondes.
+
+**getThumbnailOfImage**
+
+* Memory : 128MB.
+* Timeout : 1 minute.
+
+---
+##### ***IAM PERMISSIONS***
+
+In order to access to your IAM role for a specific function :
+*  Access to the [IAM role page](https://us-east-1.console.aws.amazon.com/iamv2/home#/roles).
+* Click on your role name.
+
+**OR**
+*  Directly access to your role via your Lambda function page.
+
+    * Go to the "**Configuration**" tab.
+    * Click on "**Permissions**" on the left tab.
+    * In the "**Execution role**", click on your role name.
+
+        <p align="left">
+            <img width="566" alt="image" src="https://user-images.githubusercontent.com/45626870/174268901-baa814ee-400e-432d-8491-7c7db75b4ac5.png">
+        </p>
+
+> You are now on your role page. The different permissions are listed below.  
+You can also see that you have normally a default permission called ***AWSLambdaBasicExecutionRole***.
+
+If you want to add a permission to a role :
+
+* Click on the upper right button "**Add permissions**".
+* Select "**Attach policies**".
+* You can filter by the name you want and select multiples policies.
+* Once you are finished with your selection, click on the lower right button "**Attach policies**".
+* Your policies are now attached to your role.
+
+**HandleFileAddedInS3**
+
+We will need for this function :
+   
+* Full access on S3 called ***AmazonS3FullAccess***
+* Full access on AmazonDB called ***AmazonDynamoDBFullAccess***
+
+**getAttributes**
+
+We will need for this function :
+   
+* Full access on S3 called ***AmazonS3FullAccess***
+* Full access on AmazonDB called ***AmazonDynamoDBFullAccess***
+
+**getOptimizedPicture**
+
+* Full access on S3 called ***AmazonS3FullAccess***
+* Full access on AmazonDB called ***AmazonDynamoDBFullAccess***
+
+**getThumbnailOfImage**
+
+* Full access on S3 called ***AmazonS3FullAccess***
+* Full access on AmazonDB called ***AmazonDynamoDBFullAccess***
+
+---
+#### ***DynamoDB configuration***
+
+In this part, we are going to create and configure the table that will store datas used later in lambda functions.
+
+1. Go on "**Tables**" tab at this [link](https://eu-west-3.console.aws.amazon.com/dynamodbv2/home?region=eu-west-3#tables).
+2. Click on "**Create table**".
+3. Enter whatever you want as the table name (the same as the environment variable you add before).
+4. Enter "**hash**" as the partition key, let the default type which is *String*.
+5. Let the default settings and click on "**Create table**".
+6. Your table will be available when the status attribute goes to "**Active**", it could take few seconds.
+---
+#### ***API Gateway configuration***
+
+Here we are going to configure our api calls, we will use a json file in order to facilitate the configuration.
+
+```json
 {
-  "Records": [
-    {
-      "eventVersion": "2.0",
-      "eventSource": "aws:s3",
-      "awsRegion": "eu-west-3",
-      "eventTime": "1970-01-01T00:00:00.000Z",
-      "eventName": "ObjectCreated:Put",
-      "userIdentity": {
-        "principalId": "EXAMPLE"
-      },
-      "requestParameters": {
-        "sourceIPAddress": "127.0.0.1"
-      },
-      "responseElements": {
-        "x-amz-request-id": "EXAMPLE123456789",
-        "x-amz-id-2": "EXAMPLE123/5678abcdefghijklambdaisawesome/mnopqrstuvwxyzABCDEFGH"
-      },
-      "s3": {
-        "s3SchemaVersion": "1.0",
-        "configurationId": "testConfigRule",
-        "bucket": {
-          "name": "BUCKET_NAME",
-          "ownerIdentity": {
-            "principalId": "EXAMPLE"
-          },
-          "arn": "arn:aws:s3:::BUCKET_NAME"
-        },
-        "object": {
-          "key": "ADDED_OBJECT’S_ NAME “,
-          “size”: 1024,
-          “eTag”: “0123456789abcdef0123456789abcdef”,
-          “sequencer”: “0A1B2C3D4E5F678901”
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "2022-06-15T16:37:00Z",
+    "title" : "Steatite"
+  },
+  "host" : "rzi0pem2eh.execute-api.eu-west-3.amazonaws.com",
+  "basePath" : "/Steatite",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/item/{corpus}/{hash+}" : {
+      "get" : {
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "corpus",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "hash",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            }
+          }
+        }
+      }
+    },
+    "/optimized/{hash+}" : {
+      "x-amazon-apigateway-any-method" : {
+        "produces" : [ "image/jpeg" ],
+        "parameters" : [ {
+          "name" : "hash",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/ImageJPEG"
+            },
+            "headers" : {
+              "Content-Type" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/thumbnail/{hash+}" : {
+      "x-amazon-apigateway-any-method" : {
+        "produces" : [ "image/jpeg" ],
+        "parameters" : [ {
+          "name" : "hash",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/ImageJPEG"
+            },
+            "headers" : {
+              "Content-Type" : {
+                "type" : "string"
+              }
+            }
+          }
         }
       }
     }
-  ]
+  },
+  "definitions" : {
+    "Empty" : {
+      "type" : "object",
+      "title" : "Empty Schema"
+    },
+    "ImageJPEG" : { }
+  }
 }
 ```
 
-Now, make sure that the element is well added into the database when you upload an element into your S3 bucket.
+1. On your laptop, create a file called "*Steatite-swagger.json*" and paste the code above.
+2. Go on the [API Gateway page](https://eu-west-3.console.aws.amazon.com/apigateway/main/apis?region=eu-west-3).
+3. Click on "**Create API**".
+4. You now have a list of different solution, we will use "**REST API**", be careful, do not choose "**REST API Private**". Click on "**Import**".
+5. Click on "**Select Swagger File**".
+6. Select the file you created called "*Steatite-swagger.json*".
+7. Click on "**Import**".
 
-##### *2. Get an item*
+You now have this view :
+        <p align="left">
+            <img width="210" alt="image" src="https://user-images.githubusercontent.com/45626870/174447544-af167f26-2816-42b6-8d2d-cda9b1125e38.png">
+        </p>
+We are no going to configure each of API calls.
 
-Create the lambda function:
-* Go to the AWS console: https://eu-west-3.console.aws.amazon.com/lambda/home?region=eu-west-3#/functions
-* Click on "*Create function*"
-* Configure the function: 
-    * Click on "*Author from scratch*" to create it from scratch.
-    * Name your function.
-	* You want your code to be in node.js, you can choose the "*Node.js 14.x*" version, the one we chose.
-	* Make sure that you are going to create a new role for your function under "*Change default execution role*".
-    * Click on "*Create function*"
+**/item/{corpus}/{hash+}**
 
- 
-<img src="./resources/get_item.png" alt="get item" width="auto"/>
+1. Click on "**GET**".
+2. In the Lambda Function input, write "**getAttributes**" and select it.
+3. Click on "**Ok**" in order to add the correct permissions to the Lambda function.
 
-Give the adequate role to your lambda function (in this case, we want our lambda function to be able to put an item in our database):
-* Go in your Lambda function.
-* Click on "*Configuration*".
-* Click on "*Permissions*".
-* Click on your role. 
+**/optimized/{hash+}**
 
- <img src="./resources/online_politic_put_item.png" alt="politic put item" width="auto"/>
+1. Click on "**ANY**".
+2. In the Lambda Function input, write "**getOptimizedPicture**" and select it.
+3. Click on "**Ok**" in order to add the correct permissions to the Lambda function.
 
-You can now see the roles that your function has.
-* Click on create an online politic
-* Indicate that it is for DynamoDB and for the action get item.
-* Add an ARN to make sur that the function can only modify the database you’ve just created.
-* Click on examine the strategy
-* Name your strategy
-* Click on create the strategy
-* Do the same for access to S3 with the action GetObject
+**/thumbnail/{hash+}**
 
-In the code section, add this and modify the name of the database: 
+1. Click on "**ANY**".
+2. In the Lambda Function input, write "**getThumbnailOfImage**" and select it.
+3. Click on "**Ok**" in order to add the correct permissions to the Lambda function.
 
-```
-const AWS = require("aws-sdk");
-const S3 = new AWS.S3();
-var DynamoDB = new AWS.DynamoDB();
-const tableName = "TABLE_NAME";
-let responseObject = {};
+> Now that all the functions are configured, we can deploy our API.
 
-exports.lambda_handler = async (event, context) => {
-   // 1. Parse out query string parameters
-   console.log("event : ",event)
-   console.log("context : ",context)
-   const imageEtag = event['pathParameters']['hash']
-   
-   console.log("********** imageEtag **********");
-   console.log(imageEtag);
-   
-   // 2. Get the information from DynamoDB
-   let paramsGetItem = {
-      TableName: tableName,
-      Key: {
-      "hash" : {
-         "S" : imageEtag
-         } 
-      }
-   };
-   
-   let result = await DynamoDB.getItem(paramsGetItem, (err, data) => {
-      if (err) {
-         console.log("[ERROR : getItem] :",err, err.stack); // an error occurred
-         responseObject['statusCode'] = 404
-         responseObject['headers'] = {}
-         responseObject['headers']['Content-Type'] = 'application/json'
-         responseObject['body'] = "Picture with hash "+imageEtag+" not found"
-         
-         return responseObject
-     }
-     else {
-         console.log("********** imageInfo **********");
-         // console.log(imageInfo)
-         console.log(data);
-         // Construct the body of the response object
-         let imageResponse = {}
-         imageResponse['hash'] = imageEtag;
-         imageResponse['resource'] = data['Item']['resource']
-         
-         const uriImage = data['Item']['resource']['S']
-         console.log(uriImage)
+1. Click on "**Actions**".
+2. In the "**API ACTIONS**" tab, click on "**Deploy API**".
+3. In the "**Deployment stage**" select "**[New stage]**".
+4. In "**Stage name**", you can put whatever you want, "**Steatite**" seems fine. 
+5. Click on "**Deploy**".
 
-         const htmlResponse = 
-            `<html style="height: 100%;">
+> The API should be deployed now, here is the view after clicking on its name :
 
-            <head>
-                <meta name="viewport" content="width=device-width, minimum-scale=0.1">
-                <title>`+imageEtag+`</title>
-            </head>
-            
-            <body style="margin: 0px; 
-                  background: #0e0e0e; 
-                  height: 100vh;
-                  display: flex;
-                  align-items: 'center';
-                  justify-content: 'center';"
-            >
-               <img 
-                  style="
-                     -webkit-user-select: none;
-                     margin: auto;
-                     cursor: zoom-in;
-                     background-color: hsl(0, 0%, 90%);
-                     transition: background-color 300ms;
-                     height: 100vh;
-                     
-                  " 
-                  src="`+uriImage+`" 
-               >
-               <div id="forest-ext-shadow-host"></div>
-            </body>
-            
-            </html>`
-            
-         // 4. Construct http repsonse object
-         responseObject['statusCode'] = 200
-         responseObject['headers'] = {}
-         responseObject['headers']['Content-Type'] = 'text/html'
-         responseObject['body'] = htmlResponse
+<p align="left">
+    <img width="260" alt="image" src="https://user-images.githubusercontent.com/45626870/174448282-583a9da9-1cf9-4dd6-86fa-31f46f649d38.png">
+</p>
 
-         //5. Return the response object
-         console.log("****** response *******")
-         console.log(responseObject)
-         //return responseObject;
-         return responseObject
-       
-     }
-   }).promise();
-   
-   return responseObject;
-};
-```
+> VERY IMPORTANT
 
-In the API gateway : 
-* Create a GET method on the Hash resource : check that it is a proxy from a lambda function, the region and add the lambda function.
-* Click on "*Action*" > "*Deploy*" the API and add a name. 
-* Click on "*Deploy*"
+We need to add the type of binary files accepted by the API in order to allow our response to send images when we will call for the optimized and the thumbnail image.
 
-![deploy_api]()
+1. In your API, click on "**Settings**" in the left menu.
+2. Scroll down to "**Binary Media Types**".
+3. Add this configuration : 
 
-In the S3 bucket : 
-* Choose "*Permissions*".
-* Under "*Block public access (bucket settings)*", choose "*Edit*".
-* Clear "*Block all public access*", and choose "*Save changes*".
-* Under "*Bucket Policy*", choose "*Edit*".
-* Copy the following bucket policy, paste it in the "*Bucket policy editor*" and modify the bucket name.
-```
- {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "PublicReadGetObject",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": [
-                "s3:GetObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::Bucket-Name/*"
-            ]
-        }
-    ]
-}
-```
-* Update the "*Resource*" to your bucket name.
-* Choose "*Save changes*".
+    <p align="left">
+      <img width="225" alt="image" src="https://user-images.githubusercontent.com/45626870/174592353-1465cd40-e1c8-4219-be69-b2dd92e029c8.png">
+    </p>
+4. Click on "**Save changes**".
+5. Go to "**Resources**" and deploy your API. You can select the same stage you added before.
 
-#### **API Gateway configuration**
+> We now want to add an image to the S3 bucket (into a folder which will take the name of the corpus).
 
-Create the API:
-* Go to the AWS console: https://eu-west-3.console.aws.amazon.com/apigateway/main/apis?region=eu-west-3.
-* Click on "*Create API*".
-* Click on "*Build*" in the REST API block.
-* Make sure you configurate it well : 
+### Test phase
 
-<img src="./resources/deploy_api.png" alt="deploy api" width="auto"/>
+#### **Add a file to S3 and verify if it added in the Thumbnail folder**
 
-* Name your API
-* Click on "*Create API*"
+In order to execute our Lambda function "**HandleFileAddedInS3**", we need to link it with our S3 bucket. Here is how we do it :
 
-When the API is created, you can access its paramaters, if you want to create a resource :
-* Click on "*Resources*".
-* Click on "*Actions*" > "*Create Resource*".
-* Give the resource a name :
+1. Go to "[**S3**](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-3&region=eu-west-3)".
+2. Enter your bucket by clicking on it.
+3. Go to the "**Properties**" tab.
+4. Scroll down to "**Event notifications**".
+5. Click on "**Create event notification**".
+6. Give it a name, such as "**HandleFileAddedInS3Event**".
+6. In the "**Event types**", select "**All object create events**".
+7. In "**Destination**", Select your Lambda function name (*HandleFileAddedInS3*).
+8. Click on "**Save changes**".
 
-<img src="./resources/give_ressource_api.png" alt="give ressource name api" width="auto"/>
+Now we want to see if we can add a file and make it automatically pasted in the thumbnail folder.
 
-* Click on "*Create Resource*".
+1. Go to "[**S3**](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-3&region=eu-west-3)".
+2. Enter your bucket by clicking on it.
+3. Click on "**Create folder**" in order to name your corpus.
+4. Click on the folder created to enter it.
+5. Click on "**Upload**".
+6. Select a photo.
+7. Click on "**Upload**".
+8. When the upload is successful, you will have a green message with "**Upload succeeded**".
+9. Click on "**Close**".
 
-> The resource is created !
+The image should be here, in your brand new folder. Now we want to verify if the file was pasted as a thumbnail in the folder.
 
-* If you want to create a sub resource under the one created, here *picture*, click on it. 
-* Click on "*Actions*" > "*Create Resource*".
-    * Check the proxy resource :
+1. Go back to your main page of your bucket.
+2. Click on "**Thumbnail**".
 
-        > *Checking the proxy will allow to get and treat all the demands made to the sub resource, for exemple, a hash that could be use to get an image.*
+> So now you have a file added in a corpus and one is added in the thumbnail folder. We want to verify if it is well added in the table in DynamoDB, and if the api calls work.
 
-    * Give a name: {hash+}
+---
+#### **Check if a file is well added in the picture table in DynamoDB**
 
-<img src="./resources/give_ressource_api_proxy.png" alt="give ressource name api with proxy" width="auto"/>
+1. Go to the "[Tables](https://eu-west-3.console.aws.amazon.com/dynamodbv2/home?region=eu-west-3#tables)" page.
+2. Access it by clicking on it.
+3. Click on "**Explore table items**".
+4. You should see a line with the same hash and the corpus.
 
-        > ⚠️️️ *Do not forget to add the "+" at the end of the resource's name as it is showed in the exemple* ⚠️️️
- 
-    * Click on "*Create Resource*".
+> Now that the file is well added in DynamoDB, let's check if we can make our API calls.
 
-We will finalise the configuration later. The tree should look like this:
+---
+#### **Check if our API Gateway calls work**
 
-<img src="./resources/tree_conf.png" alt="tree configuration" width="auto"/>
+1. Go to [API Gateway](https://eu-west-3.console.aws.amazon.com/apigateway/main/apis?region=eu-west-3).
+2. Access your API by clicking on it.
+3. Go to "**Stages**" on the left menu.
+4. Open the menu of your API by clicking on it.
 
-#### **DynamoDB configuration**
+**/item/{corpus}/{hash+}**
 
-* Go to the AWS console : https://eu-west-3.console.aws.amazon.com/dynamodbv2/home?region=eu-west-3#service.
-* Click on "*Tables*" to go go into your tables on the left sidebar.
-* Click on "*Create table*".
-* Configurate our table : 
-    * Give a name.
-    * Give a name to you partition key : hash.
-    * Click on "*Create table*"
+1. Click on "**GET**".
+2. Click on the "**Invoke URL**" link. 
+3. Replace corpus by the corpus name and the hash by the right hash.
+> Go to your DynamoDB table in order to know it.
+4. You should have this kind of JSON response :
+    
+    <p align="left">
+      <img width="1245" alt="image" src="https://user-images.githubusercontent.com/45626870/174591299-bce6814a-a9f1-43a2-90ab-55c89040a48d.png">
+   </p>
+---
 
-> Your table is ready!
+**/optimized/{hash+}**
+
+For this part you can use the JSON response you had before and copy paste the "**optimized**" attribute value.
+
+You should receive the optimized version of your image.
+
+> First call is the one that create the image in the Optimized folder into your S3 bucket. The response could take few seconds.
+
+**/thumbnail/{hash+}**
+
+For this part you can use the JSON response you had before and copy paste the "**thumbnail**" attribute value.
+
+You should receive the thumbnail of your image.
