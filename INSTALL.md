@@ -5,9 +5,6 @@ AWS Account with access to :
 * [Lambda](https://aws.amazon.com/fr/lambda/)
 * [API Gateway](https://aws.amazon.com/fr/api-gateway/)
 * [DynamoDB](https://aws.amazon.com/fr/dynamodb/)
-
-
-
 ## Installation procedure
 
 ### Brief presentation of the AWS components
@@ -19,14 +16,12 @@ In this project, we use 4 AWS components :
 
 To better understand the links between the different entities, here is a schema of what happens when one makes a request to have information used in this project :
 
-<img src="./resources/schema_lambda.png" alt="isolated" width="auto"/>
+<img alt="image" src="https://user-images.githubusercontent.com/45626870/175066954-fb071d8a-6b09-409a-b39e-13821c249ccd.png">
 
 ---
 ### Configuration
 
 > For all the configurations, we recommend using the AWS region closest to you (*in our case, eu-west-3 | Europe Paris*)
-
-We are going to start by configurating all the aws elements of the project and finish with the lambda. Every lambda function represents a functional feature that we want to implement.
 
 ---
 #### ***S3 Configuration***
