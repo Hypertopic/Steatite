@@ -2,6 +2,7 @@ port: 1337
 service: steatite:80
 path: ''
 authenticationService: couchdb:5984
+challengeRealm: Steatite
 logFormat: :date[iso] :remote-addr :remote-user :method :url :status :response-time[0]ms :total-time[0]ms ":user-agent"
 limit: 500mb
 session:
