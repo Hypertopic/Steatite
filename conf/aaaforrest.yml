@@ -16,3 +16,6 @@ session:
   unset: destroy
 cors:
   origin: '*'
+robots:
+  UserAgent: '*'
+  Disallow: /
