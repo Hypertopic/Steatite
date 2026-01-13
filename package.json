@@ -1,0 +1,22 @@
+{
+  "name": "steatite-tests",
+  "version": "1.0.0",
+  "description": "Integration tests for Steatite with HAProxy and AAAforREST",
+  "scripts": {
+    "test": "jest --verbose --runInBand",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "axios": "^1.6.0",
+    "form-data": "^4.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 65000,
+    "testMatch": [
+      "**/__tests__/integration/**/*_spec.js"
+    ]
+  }
+}

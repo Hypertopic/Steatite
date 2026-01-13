@@ -2,20 +2,50 @@ services:
 
   steatite:
     image: benel/steatite
+    container_name: steatite
     volumes:
       - ./data:/var/www/html/data
-
-  proxy:
+    networks:
+      - steatite_net
+      
+  aaaforrest:
     image: benel/aaaforrest
+    container_name: aaaforrest
     ports:
-      - 80:1337
+      - 1337:1337
     volumes:
       - ./conf/aaaforrest.yml:/AAAforREST/conf/config.yml:ro
     working_dir: /AAAforREST
     depends_on:
       - steatite
+      - couchdb
+    networks:
+      - steatite_net
 
+  couchdb:
+    image: couchdb:3
+    container_name: couchdb
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+    ports:
+      - 5984:5984
+    networks:
+     - steatite_net
+    volumes:
+      - ./couchdb_data:/opt/couchdb/data
+
+  haproxy:
+    image: haproxy:2.8
+    container_name: haproxy
+    depends_on:
+      - aaaforrest
+    ports:
+      - 8888:80
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    networks:
+      - steatite_net
+      
 networks:
-  default:
-    external:
-      name: argos_default
+  steatite_net: {}

@@ -13,9 +13,16 @@ Home page: <https://github.com/Hypertopic/Steatite>
 
 ## Installation procedure
 
-    docker-compose up -d steatite
+    docker-compose up -d
 
-Steatite (API endpoint and user interface) is now available at <http://localhost/>.
+This starts the full stack:
+
+- **HAProxy** (port 8888) — Reverse proxy with per-IP rate limiting (100 req/10s). Thumbnail requests (`/thumbnail/`) are whitelisted.
+- **AAAforREST** — Authentication and authorization via CouchDB.
+- **CouchDB** — User credential storage.
+- **Steatite** — Image processing service.
+
+The entry point is now available at <http://localhost:8888/>.
 
 
 ## Functional features
@@ -152,3 +159,56 @@ The response will be:
 
 - Compatible with Hypertopic v1 and v2 protocols.
 - Compatible with about [100](http://netpbm.sourceforge.net/doc/directory.html#converters) raster image formats.
+
+## Running Integration Tests
+
+The project includes a comprehensive integration test suite that validates the entire HAProxy → AAAforREST → Steatite stack.
+
+### Prerequisites
+
+1. **Start the Docker stack:**
+   ```bash
+   docker-compose up -d
+   ```
+
+2. **Install test dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Create test user in CouchDB:**
+   ```bash
+   ./setup-test-user.sh
+   ```
+   
+   Or manually:
+   ```bash
+   curl -X PUT http://admin:admin@localhost:5984/_users/org.couchdb.user:test \
+        -H "Content-Type: application/json" \
+        -d '{"name":"test","password":"test","roles":[],"type":"user"}'
+   ```
+
+### Running Tests
+
+```bash
+npm test
+```
+
+**Test Duration:** ~7 minutes (includes rate limit reset waits)
+
+### Test Coverage
+
+The test suite validates:
+- Full stack connectivity (HAProxy → AAAforREST → Steatite)
+- Authentication and authorization
+- HAProxy rate limiting (100 requests/10 seconds per IP)
+- Bot protection and traffic policing
+- System resilience under load
+- Session management
+
+**Test Results:** 45 integration tests covering connectivity, authentication, rate limiting, bot protection, and load resilience.
+
+### Notes
+
+- Tests require the full Docker stack to be running
+- The `test/test` user must exist in CouchDB
